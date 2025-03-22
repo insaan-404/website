@@ -495,6 +495,27 @@
         .now-playing-title {
             font-weight: 500;
         }
+        
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        a, .theme-option, .font-option, .toggle-button {
+            position: relative;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -726,7 +747,9 @@
         </div>
     </div>
 
-// Theme and font switcher functionality
+
+    <script>
+        // Theme and font switcher functionality
 const themeControls = document.getElementById('themeControls');
 const settingsIcon = document.getElementById('settingsIcon');
 const closeBtn = document.getElementById('closeBtn');
@@ -836,11 +859,7 @@ searchInput.addEventListener('input', function() {
             tags.some(tag => tag.includes(searchTerm));
         
         // Show or hide the card based on search match
-        if (searchTerm === '' || matchFound) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
+        card.style.display = matchFound || searchTerm === '' ? 'flex' : 'none';
     });
 });
 
@@ -865,7 +884,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Load saved preferences from localStorage
+// Initialize on DOM content loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Load theme preference
     const savedTheme = localStorage.getItem('preferred-theme');
@@ -936,11 +955,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize animation for cards (on load)
     animateCardsOnScroll();
+    
+    // Initialize now playing
+    updateNowPlaying();
+    // Set interval for updating now playing
+    setInterval(updateNowPlaying, 30000);
 });
 
 // Card animations on scroll
 function animateCardsOnScroll() {
     const cards = document.querySelectorAll('.post-card');
+    
+    if (!cards.length) return;
     
     // Create intersection observer
     const observer = new IntersectionObserver((entries) => {
@@ -966,7 +992,6 @@ function animateCardsOnScroll() {
 }
 
 // Currently playing song functionality - simulated for now
-// You could replace this with an actual API call to a music service
 function updateNowPlaying() {
     const songs = [
         { title: "Weightless", artist: "Marconi Union" },
@@ -986,61 +1011,75 @@ function updateNowPlaying() {
     }
 }
 
-// Update the "now playing" song every 30 seconds
-updateNowPlaying();
-setInterval(updateNowPlaying, 30000);
-
-// Click effects - subtle pulse on buttons and links
-document.querySelectorAll('a, .theme-option, .font-option, .toggle-button').forEach(element => {
-    element.addEventListener('click', function(e) {
-        // Don't add the effect for links that trigger smooth scrolling
-        if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
-            return;
-        }
+// Add click effects for UI elements
+function addRippleEffects() {
+    document.querySelectorAll('a, .theme-option, .font-option, .toggle-button').forEach(element => {
+        // Check if the event listener is already added
+        if (element.hasRippleEffect) return;
         
-        // Create ripple effect
-        const ripple = document.createElement('span');
-        ripple.classList.add('ripple-effect');
-        
-        // Position the ripple where clicked
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        
-        ripple.style.width = ripple.style.height = `${size}px`;
-        ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-        ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-        
-        // Add and then remove the ripple
-        this.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
+        element.hasRippleEffect = true;
+        element.addEventListener('click', function(e) {
+            // Don't add the effect for links that trigger smooth scrolling
+            if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
+                return;
+            }
+            
+            // Create ripple effect
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple-effect');
+            
+            // Position the ripple where clicked
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            
+            // Add and then remove the ripple
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
     });
-});
+}
 
 // Add CSS for ripple effect
-const style = document.createElement('style');
-style.textContent = `
-    .ripple-effect {
-        position: absolute;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: scale(0);
-        animation: ripple 0.6s linear;
-        pointer-events: none;
-    }
+function addRippleStyles() {
+    // Check if styles already exist
+    if (document.querySelector('#ripple-styles')) return;
     
-    @keyframes ripple {
-        to {
-            transform: scale(2);
-            opacity: 0;
+    const style = document.createElement('style');
+    style.id = 'ripple-styles';
+    style.textContent = `
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
         }
-    }
-    
-    a, .theme-option, .font-option, .toggle-button {
-        position: relative;
-        overflow: hidden;
-    }
-`;
-document.head.appendChild(style);
+        
+        @keyframes ripple {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        a, .theme-option, .font-option, .toggle-button {
+            position: relative;
+            overflow: hidden;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Call ripple effect setup after DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    addRippleStyles();
+    addRippleEffects();
+});
 
 // Easter egg - Konami code
 let konamiCodeSequence = [];
@@ -1052,31 +1091,41 @@ document.addEventListener('keydown', (e) => {
     
     // Check if the sequence matches the Konami code
     if (konamiCodeSequence.join(',') === konamiCode.join(',')) {
-        // Easter egg activated!
-        document.body.classList.add('konami-activated');
-        
-        // Create a custom notification
-        const notification = document.createElement('div');
-        notification.className = 'easter-egg-notification';
-        notification.textContent = '🎮 Level up! Developer mode activated!';
-        document.body.appendChild(notification);
-        
-        // Remove notification after a few seconds
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => notification.remove(), 500);
-        }, 3000);
-        
-        // Apply special Easter egg styles
+        activateEasterEgg();
+    }
+});
+
+function activateEasterEgg() {
+    // Check if already activated
+    if (document.body.classList.contains('konami-activated')) return;
+    
+    // Easter egg activated!
+    document.body.classList.add('konami-activated');
+    
+    // Create a custom notification
+    const notification = document.createElement('div');
+    notification.className = 'easter-egg-notification';
+    notification.textContent = '🎮 Level up! Developer mode activated!';
+    document.body.appendChild(notification);
+    
+    // Remove notification after a few seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+    
+    // Apply special Easter egg styles
+    if (!document.querySelector('#easter-egg-styles')) {
         const easterEggStyle = document.createElement('style');
+        easterEggStyle.id = 'easter-egg-styles';
         easterEggStyle.textContent = `
             .easter-egg-notification {
                 position: fixed;
                 top: 20px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: var(--accent-color);
-                color: var(--bg-color);
+                background: var(--accent-color, #ff5e82);
+                color: var(--bg-color, #ffffff);
                 padding: 10px 20px;
                 border-radius: 5px;
                 z-index: 1000;
@@ -1102,33 +1151,48 @@ document.addEventListener('keydown', (e) => {
         `;
         document.head.appendChild(easterEggStyle);
     }
-});
+}
 
 // Dark mode detection and automatic theme switching
-if (window.matchMedia && !localStorage.getItem('preferred-theme')) {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // User prefers dark mode and hasn't set a theme preference
-        document.body.classList.add('theme-dracula');
-        
-        // Update active state in menu
-        themeOptions.forEach(opt => {
-            if (opt.getAttribute('data-theme') === 'dracula') {
-                opt.classList.add('active');
-            } else {
-                opt.classList.remove('active');
-            }
-        });
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-        // User prefers light mode and hasn't set a theme preference
-        document.body.classList.add('theme-light');
-        
-        // Update active state in menu
-        themeOptions.forEach(opt => {
-            if (opt.getAttribute('data-theme') === 'light') {
-                opt.classList.add('active');
-            } else {
-                opt.classList.remove('active');
-            }
-        });
+function checkSystemPreferences() {
+    if (window.matchMedia && !localStorage.getItem('preferred-theme')) {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // User prefers dark mode and hasn't set a theme preference
+            document.body.classList.add('theme-dracula');
+            
+            // Update active state in menu
+            themeOptions.forEach(opt => {
+                if (opt.getAttribute('data-theme') === 'dracula') {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            // User prefers light mode and hasn't set a theme preference
+            document.body.classList.add('theme-light');
+            
+            // Update active state in menu
+            themeOptions.forEach(opt => {
+                if (opt.getAttribute('data-theme') === 'light') {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+        }
     }
+}
+
+// Check system preferences after DOM is loaded
+document.addEventListener('DOMContentLoaded', checkSystemPreferences);
+
+// Listen for system preference changes
+if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        // Only change theme if user hasn't set a preference
+        if (!localStorage.getItem('preferred-theme')) {
+            checkSystemPreferences();
+        }
+    });
 }
