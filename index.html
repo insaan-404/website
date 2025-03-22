@@ -748,144 +748,163 @@
     </div>
 
 
-    <script>
-        // Theme and font switcher functionality
-const themeControls = document.getElementById('themeControls');
-const settingsIcon = document.getElementById('settingsIcon');
-const closeBtn = document.getElementById('closeBtn');
-const controlsContent = document.querySelector('.controls-content');
-const themeOptions = document.querySelectorAll('.theme-option');
-const fontOptions = document.querySelectorAll('.font-option');
-const searchInput = document.getElementById('searchInput');
-const postCards = document.querySelectorAll('.post-card');
-
-// Toggle controls visibility
-settingsIcon.addEventListener('click', function() {
-    themeControls.classList.remove('collapsed');
-    settingsIcon.style.display = 'none';
-    controlsContent.style.display = 'block';
-});
-
-closeBtn.addEventListener('click', function() {
-    themeControls.classList.add('collapsed');
-    settingsIcon.style.display = 'block';
-    controlsContent.style.display = 'none';
-});
-
-// Theme switching
-themeOptions.forEach(option => {
-    option.addEventListener('click', function() {
-        const theme = this.getAttribute('data-theme');
-        
-        // Remove all theme classes
-        document.body.classList.remove(
-            'theme-light',
-            'theme-dark',
-            'theme-synthwave', 
-            'theme-nord', 
-            'theme-solarized', 
-            'theme-dracula', 
-            'theme-github'
-        );
-        
-        // Add selected theme class if not default
-        if (theme !== 'default') {
-            document.body.classList.add(`theme-${theme}`);
-        }
-        
-        // Update active state
-        themeOptions.forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Save preference to localStorage
-        localStorage.setItem('preferred-theme', theme);
-    });
-});
-
-// Font switching
-fontOptions.forEach(option => {
-    option.addEventListener('click', function() {
-        const font = this.getAttribute('data-font');
-        
-        // Remove all font classes
-        document.body.classList.remove(
-            'font-fira', 
-            'font-jetbrains', 
-            'font-space'
-        );
-        
-        // Add selected font class
-        document.body.classList.add(`font-${font}`);
-        
-        // Update active state in menu
-        fontOptions.forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-        
-        // Apply font directly
-        document.body.style.fontFamily = getFontFamily(font);
-        
-        // Save preference to localStorage
-        localStorage.setItem('preferred-font', font);
-    });
-});
-
-// Helper function to get font family string
-function getFontFamily(fontKey) {
-    switch(fontKey) {
-        case 'fira':
-            return "'Fira Code', monospace";
-        case 'jetbrains':
-            return "'JetBrains Mono', monospace";
-        case 'space':
-            return "'Space Mono', monospace";
-        default:
-            return "'Fira Code', monospace";
-    }
-}
-
-// Search functionality
-searchInput.addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase().trim();
-    
-    postCards.forEach(card => {
-        const title = card.querySelector('.post-title').textContent.toLowerCase();
-        const excerpt = card.querySelector('.post-excerpt').textContent.toLowerCase();
-        const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
-        
-        // Check if the search term is found in title, excerpt, or tags
-        const matchFound = 
-            title.includes(searchTerm) || 
-            excerpt.includes(searchTerm) || 
-            tags.some(tag => tag.includes(searchTerm));
-        
-        // Show or hide the card based on search match
-        card.style.display = matchFound || searchTerm === '' ? 'flex' : 'none';
-    });
-});
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            // Smooth scroll to element
-            window.scrollTo({
-                top: targetElement.offsetTop - 20,
-                behavior: 'smooth'
-            });
-            
-            // Update URL hash without page jump
-            history.pushState(null, null, targetId);
-        }
-    });
-});
-
-// Initialize on DOM content loaded
+   <script>// Theme and font switcher functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Core element references - moved to top of DOMContentLoaded
+    const themeControls = document.getElementById('themeControls');
+    const settingsIcon = document.getElementById('settingsIcon');
+    const closeBtn = document.getElementById('closeBtn');
+    const controlsContent = document.querySelector('.controls-content');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    const fontOptions = document.querySelectorAll('.font-option');
+    const searchInput = document.getElementById('searchInput');
+    
+    // Create test post cards and links if they don't exist (for testing)
+    createTestElements();
+    
+    // Re-query post cards after possibly creating test elements
+    const postCards = document.querySelectorAll('.post-card');
+    
+    // Toggle controls visibility
+    if (settingsIcon) {
+        settingsIcon.addEventListener('click', function() {
+            themeControls.classList.remove('collapsed');
+            settingsIcon.style.display = 'none';
+            controlsContent.style.display = 'block';
+        });
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            themeControls.classList.add('collapsed');
+            settingsIcon.style.display = 'block';
+            controlsContent.style.display = 'none';
+        });
+    }
+    
+    // Theme switching
+    themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const theme = this.getAttribute('data-theme');
+            
+            // Remove all theme classes
+            document.body.classList.remove(
+                'theme-light',
+                'theme-dark',
+                'theme-synthwave', 
+                'theme-nord', 
+                'theme-solarized', 
+                'theme-dracula', 
+                'theme-github'
+            );
+            
+            // Add selected theme class if not default
+            if (theme !== 'default') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+            
+            // Update active state
+            themeOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Save preference to localStorage
+            localStorage.setItem('preferred-theme', theme);
+        });
+    });
+    
+    // Font switching
+    fontOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const font = this.getAttribute('data-font');
+            
+            // Remove all font classes
+            document.body.classList.remove(
+                'font-fira', 
+                'font-jetbrains', 
+                'font-space'
+            );
+            
+            // Add selected font class
+            document.body.classList.add(`font-${font}`);
+            
+            // Update active state in menu
+            fontOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Apply font directly
+            document.body.style.fontFamily = getFontFamily(font);
+            
+            // Save preference to localStorage
+            localStorage.setItem('preferred-font', font);
+        });
+    });
+    
+    // Search functionality - Fix to ensure it works
+    if (searchInput) {
+        console.log("Search input found, adding event listener");
+        
+        searchInput.addEventListener('input', function() {
+            console.log("Search input event triggered");
+            const searchTerm = this.value.toLowerCase().trim();
+            console.log("Search term:", searchTerm);
+            
+            postCards.forEach(card => {
+                console.log("Processing card:", card);
+                
+                // Safely get text content (with fallbacks)
+                const title = card.querySelector('.post-title')?.textContent.toLowerCase() || '';
+                const excerpt = card.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
+                const tagElements = card.querySelectorAll('.tag');
+                const tags = Array.from(tagElements).map(tag => tag.textContent.toLowerCase());
+                
+                console.log("Card data:", { title, excerpt, tags });
+                
+                // Check if the search term is found in title, excerpt, or tags
+                const matchFound = 
+                    title.includes(searchTerm) || 
+                    excerpt.includes(searchTerm) || 
+                    tags.some(tag => tag.includes(searchTerm));
+                
+                console.log("Match found:", matchFound);
+                
+                // Show or hide the card based on search match
+                if (searchTerm === '' || matchFound) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // Trigger a test search to ensure functionality
+        console.log("Dispatching test input event");
+        const testEvent = new Event('input', { bubbles: true });
+        searchInput.dispatchEvent(testEvent);
+    } else {
+        console.warn("Search input element not found");
+    }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to element
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Update URL hash without page jump
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+    
     // Load theme preference
     const savedTheme = localStorage.getItem('preferred-theme');
     if (savedTheme) {
@@ -960,35 +979,385 @@ document.addEventListener('DOMContentLoaded', function() {
     updateNowPlaying();
     // Set interval for updating now playing
     setInterval(updateNowPlaying, 30000);
+    
+    // Add ripple effects and styles
+    addRippleStyles();
+    addRippleEffects();
+    
+    // Check system preferences
+    checkSystemPreferences();
 });
+
+// Helper function to get font family string
+function getFontFamily(fontKey) {
+    switch(fontKey) {
+        case 'fira':
+            return "'Fira Code', monospace";
+        case 'jetbrains':
+            return "'JetBrains Mono', monospace";
+        case 'space':
+            return "'Space Mono', monospace";
+        default:
+            return "'Fira Code', monospace";
+    }
+}
+
+// Create test elements for debugging/testing purposes
+function createTestElements() {
+    // Check if container exists, if not create one
+    let container = document.querySelector('.post-container');
+    if (!container) {
+        console.log('Creating test container');
+        container = document.createElement('div');
+        container.className = 'post-container';
+        document.body.appendChild(container);
+    }
+    
+    // Check if we already have post cards
+    if (document.querySelectorAll('.post-card').length === 0) {
+        console.log('Creating test post cards');
+        
+        // Sample data for test cards
+        const testPosts = [
+            {
+                title: 'JavaScript Fundamentals',
+                excerpt: 'Learn the core concepts of JavaScript programming',
+                tags: ['JavaScript', 'Web', 'Programming']
+            },
+            {
+                title: 'CSS Grid Layout',
+                excerpt: 'Master modern layout techniques with CSS Grid',
+                tags: ['CSS', 'Web Design', 'Layout']
+            },
+            {
+                title: 'React Hooks',
+                excerpt: 'Simplify your React components with Hooks',
+                tags: ['React', 'JavaScript', 'Frontend']
+            },
+            {
+                title: 'Python Data Analysis',
+                excerpt: 'Analyze data efficiently with Python libraries',
+                tags: ['Python', 'Data Science', 'Analytics']
+            }
+        ];
+        
+        // Create test cards
+        testPosts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.style.margin = '10px';
+            card.style.padding = '15px';
+            card.style.border = '1px solid #ccc';
+            card.style.borderRadius = '8px';
+            card.style.display = 'flex';
+            card.style.flexDirection = 'column';
+            
+            const title = document.createElement('h3');
+            title.className = 'post-title';
+            title.textContent = post.title;
+            
+            const excerpt = document.createElement('p');
+            excerpt.className = 'post-excerpt';
+            excerpt.textContent = post.excerpt;
+            
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'post-tags';
+            tagsContainer.style.display = 'flex';
+            tagsContainer.style.flexWrap = 'wrap';
+            tagsContainer.style.gap = '5px';
+            tagsContainer.style.marginTop = '10px';
+            
+            post.tags.forEach(tagText => {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = tagText;
+                tag.style.background = '#eee';
+                tag.style.padding = '3px 8px';
+                tag.style.borderRadius = '4px';
+                tag.style.fontSize = '12px';
+                tagsContainer.appendChild(tag);
+            });
+            
+            card.appendChild(title);
+            card.appendChild(excerpt);
+            card.appendChild(tagsContainer);
+            container.appendChild(card);
+        });
+    }
+    
+    // Check if we have anchor links for testing smooth scroll
+    if (document.querySelectorAll('a[href^="#"]').length === 0) {
+        console.log('Creating test navigation links');
+        
+        const nav = document.createElement('nav');
+        nav.style.padding = '15px';
+        nav.style.marginBottom = '20px';
+        nav.style.background = '#f5f5f5';
+        nav.style.display = 'flex';
+        nav.style.gap = '15px';
+        
+        // Create section links
+        ['Home', 'About', 'Projects', 'Contact'].forEach((section, index) => {
+            // Create section first
+            const sectionEl = document.createElement('section');
+            sectionEl.id = section.toLowerCase();
+            sectionEl.style.marginTop = '50px';
+            sectionEl.style.padding = '20px';
+            sectionEl.style.minHeight = '200px';
+            sectionEl.style.background = '#f9f9f9';
+            
+            const heading = document.createElement('h2');
+            heading.textContent = section;
+            sectionEl.appendChild(heading);
+            
+            const content = document.createElement('p');
+            content.textContent = `This is the ${section} section content. It demonstrates the smooth scrolling functionality.`;
+            sectionEl.appendChild(content);
+            
+            document.body.appendChild(sectionEl);
+            
+            // Now create the nav link
+            const link = document.createElement('a');
+            link.href = `#${section.toLowerCase()}`;
+            link.textContent = section;
+            link.style.textDecoration = 'none';
+            link.style.color = '#333';
+            link.style.fontWeight = 'bold';
+            nav.appendChild(link);
+        });
+        
+        // Insert navigation at the top
+        document.body.insertBefore(nav, document.body.firstChild);
+    }
+    
+    // Create search input if missing
+    if (!document.getElementById('searchInput')) {
+        console.log('Creating test search input');
+        
+        const searchContainer = document.createElement('div');
+        searchContainer.style.margin = '20px 0';
+        searchContainer.style.padding = '10px';
+        searchContainer.style.background = '#f0f0f0';
+        
+        const searchLabel = document.createElement('label');
+        searchLabel.textContent = 'Search posts: ';
+        searchLabel.setAttribute('for', 'searchInput');
+        
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.id = 'searchInput';
+        searchInput.placeholder = 'Enter search term...';
+        searchInput.style.padding = '5px 10px';
+        searchInput.style.width = '300px';
+        
+        searchContainer.appendChild(searchLabel);
+        searchContainer.appendChild(searchInput);
+        
+        // Insert before post container
+        const postContainer = document.querySelector('.post-container');
+        if (postContainer) {
+            document.body.insertBefore(searchContainer, postContainer);
+        } else {
+            document.body.insertBefore(searchContainer, document.body.firstChild);
+        }
+    }
+    
+    // Create theme controls if missing
+    if (!document.getElementById('themeControls')) {
+        console.log('Creating test theme controls');
+        
+        const themeControls = document.createElement('div');
+        themeControls.id = 'themeControls';
+        themeControls.className = 'theme-controls collapsed';
+        themeControls.style.position = 'fixed';
+        themeControls.style.top = '20px';
+        themeControls.style.right = '20px';
+        themeControls.style.background = '#fff';
+        themeControls.style.border = '1px solid #ddd';
+        themeControls.style.borderRadius = '8px';
+        themeControls.style.padding = '10px';
+        themeControls.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        themeControls.style.zIndex = '100';
+        
+        const settingsIcon = document.createElement('div');
+        settingsIcon.id = 'settingsIcon';
+        settingsIcon.innerHTML = '⚙️';
+        settingsIcon.style.cursor = 'pointer';
+        settingsIcon.style.fontSize = '24px';
+        
+        const controlsContent = document.createElement('div');
+        controlsContent.className = 'controls-content';
+        controlsContent.style.display = 'none';
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.id = 'closeBtn';
+        closeBtn.textContent = '×';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '5px';
+        closeBtn.style.right = '5px';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.fontSize = '20px';
+        closeBtn.style.cursor = 'pointer';
+        
+        // Theme options
+        const themeSection = document.createElement('div');
+        themeSection.innerHTML = '<h4>Theme</h4>';
+        
+        const themesList = document.createElement('div');
+        themesList.className = 'themes-list';
+        themesList.style.display = 'flex';
+        themesList.style.flexDirection = 'column';
+        themesList.style.gap = '5px';
+        
+        const themes = ['default', 'light', 'dark', 'synthwave', 'nord', 'solarized', 'dracula', 'github'];
+        
+        themes.forEach(theme => {
+            const option = document.createElement('div');
+            option.className = 'theme-option';
+            option.setAttribute('data-theme', theme);
+            option.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+            option.style.padding = '5px 10px';
+            option.style.cursor = 'pointer';
+            option.style.borderRadius = '4px';
+            
+            option.addEventListener('mouseover', () => {
+                option.style.background = '#f0f0f0';
+            });
+            
+            option.addEventListener('mouseout', () => {
+                if (!option.classList.contains('active')) {
+                    option.style.background = 'transparent';
+                }
+            });
+            
+            themesList.appendChild(option);
+        });
+        
+        // Font options
+        const fontSection = document.createElement('div');
+        fontSection.innerHTML = '<h4>Font</h4>';
+        
+        const fontsList = document.createElement('div');
+        fontsList.className = 'fonts-list';
+        fontsList.style.display = 'flex';
+        fontsList.style.flexDirection = 'column';
+        fontsList.style.gap = '5px';
+        
+        const fonts = ['fira', 'jetbrains', 'space'];
+        
+        fonts.forEach(font => {
+            const option = document.createElement('div');
+            option.className = 'font-option';
+            option.setAttribute('data-font', font);
+            option.textContent = font.charAt(0).toUpperCase() + font.slice(1);
+            option.style.padding = '5px 10px';
+            option.style.cursor = 'pointer';
+            option.style.borderRadius = '4px';
+            
+            option.addEventListener('mouseover', () => {
+                option.style.background = '#f0f0f0';
+            });
+            
+            option.addEventListener('mouseout', () => {
+                if (!option.classList.contains('active')) {
+                    option.style.background = 'transparent';
+                }
+            });
+            
+            fontsList.appendChild(option);
+        });
+        
+        // Assemble the controls
+        themeSection.appendChild(themesList);
+        fontSection.appendChild(fontsList);
+        
+        controlsContent.appendChild(closeBtn);
+        controlsContent.appendChild(themeSection);
+        controlsContent.appendChild(fontSection);
+        
+        themeControls.appendChild(settingsIcon);
+        themeControls.appendChild(controlsContent);
+        
+        document.body.appendChild(themeControls);
+    }
+    
+    // Create now playing if missing
+    if (!document.querySelector('.now-playing')) {
+        console.log('Creating test now playing element');
+        
+        const nowPlaying = document.createElement('div');
+        nowPlaying.className = 'now-playing';
+        nowPlaying.style.position = 'fixed';
+        nowPlaying.style.bottom = '20px';
+        nowPlaying.style.left = '20px';
+        nowPlaying.style.background = 'rgba(0,0,0,0.7)';
+        nowPlaying.style.color = 'white';
+        nowPlaying.style.padding = '10px 15px';
+        nowPlaying.style.borderRadius = '20px';
+        nowPlaying.style.fontSize = '14px';
+        nowPlaying.style.display = 'flex';
+        nowPlaying.style.alignItems = 'center';
+        nowPlaying.style.gap = '10px';
+        
+        const musicIcon = document.createElement('div');
+        musicIcon.textContent = '🎵';
+        musicIcon.style.fontSize = '20px';
+        
+        const nowPlayingTitle = document.createElement('div');
+        nowPlayingTitle.className = 'now-playing-title';
+        nowPlayingTitle.textContent = 'Loading...';
+        
+        nowPlaying.appendChild(musicIcon);
+        nowPlaying.appendChild(nowPlayingTitle);
+        
+        document.body.appendChild(nowPlaying);
+    }
+}
 
 // Card animations on scroll
 function animateCardsOnScroll() {
     const cards = document.querySelectorAll('.post-card');
     
-    if (!cards.length) return;
+    if (!cards.length) {
+        console.warn("No cards found for animation");
+        return;
+    }
     
-    // Create intersection observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Add animation class when card comes into view
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
-                observer.unobserve(entry.target);
-            }
+    console.log(`Setting up animations for ${cards.length} cards`);
+    
+    // Check if IntersectionObserver is available
+    if ('IntersectionObserver' in window) {
+        // Create intersection observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log("Card came into view", entry.target);
+                    // Add animation class when card comes into view
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
         });
-    }, {
-        threshold: 0.1
-    });
-    
-    // Set initial state and observe each card
-    cards.forEach(card => {
-        card.style.opacity = "0";
-        card.style.transform = "translateY(20px)";
-        card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-        observer.observe(card);
-    });
+        
+        // Set initial state and observe each card
+        cards.forEach(card => {
+            card.style.opacity = "0";
+            card.style.transform = "translateY(20px)";
+            card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            observer.observe(card);
+        });
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        console.log("IntersectionObserver not supported, using fallback");
+        cards.forEach(card => {
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
+        });
+    }
 }
 
 // Currently playing song functionality - simulated for now
@@ -1008,21 +1377,28 @@ function updateNowPlaying() {
     const nowPlayingElement = document.querySelector('.now-playing-title');
     if (nowPlayingElement) {
         nowPlayingElement.textContent = `${randomSong.title} - ${randomSong.artist}`;
+        console.log("Now playing updated:", nowPlayingElement.textContent);
+    } else {
+        console.warn("Now playing element not found");
     }
 }
 
-// Add click effects for UI elements
+// Add ripple effects for UI elements
 function addRippleEffects() {
     document.querySelectorAll('a, .theme-option, .font-option, .toggle-button').forEach(element => {
-        // Check if the event listener is already added
-        if (element.hasRippleEffect) return;
+        // Skip if already processed
+        if (element.hasAttribute('data-has-ripple')) return;
         
-        element.hasRippleEffect = true;
+        // Mark as processed
+        element.setAttribute('data-has-ripple', 'true');
+        
         element.addEventListener('click', function(e) {
             // Don't add the effect for links that trigger smooth scrolling
             if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
                 return;
             }
+            
+            console.log("Ripple effect triggered");
             
             // Create ripple effect
             const ripple = document.createElement('span');
@@ -1045,8 +1421,9 @@ function addRippleEffects() {
 
 // Add CSS for ripple effect
 function addRippleStyles() {
-    // Check if styles already exist
-    if (document.querySelector('#ripple-styles')) return;
+    if (document.getElementById('ripple-styles')) return;
+    
+    console.log("Adding ripple styles");
     
     const style = document.createElement('style');
     style.id = 'ripple-styles';
@@ -1075,12 +1452,6 @@ function addRippleStyles() {
     document.head.appendChild(style);
 }
 
-// Call ripple effect setup after DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    addRippleStyles();
-    addRippleEffects();
-});
-
 // Easter egg - Konami code
 let konamiCodeSequence = [];
 const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -1089,8 +1460,11 @@ document.addEventListener('keydown', (e) => {
     konamiCodeSequence.push(e.key);
     konamiCodeSequence = konamiCodeSequence.slice(-10); // Keep only the last 10 keys
     
+    console.log("Konami sequence updated:", konamiCodeSequence);
+    
     // Check if the sequence matches the Konami code
     if (konamiCodeSequence.join(',') === konamiCode.join(',')) {
+        console.log("Konami code activated!");
         activateEasterEgg();
     }
 });
@@ -1101,6 +1475,8 @@ function activateEasterEgg() {
     
     // Easter egg activated!
     document.body.classList.add('konami-activated');
+    
+    console.log("Easter egg activated");
     
     // Create a custom notification
     const notification = document.createElement('div');
@@ -1115,7 +1491,7 @@ function activateEasterEgg() {
     }, 3000);
     
     // Apply special Easter egg styles
-    if (!document.querySelector('#easter-egg-styles')) {
+    if (!document.getElementById('easter-egg-styles')) {
         const easterEggStyle = document.createElement('style');
         easterEggStyle.id = 'easter-egg-styles';
         easterEggStyle.textContent = `
@@ -1155,13 +1531,16 @@ function activateEasterEgg() {
 
 // Dark mode detection and automatic theme switching
 function checkSystemPreferences() {
+    console.log("Checking system preferences for theme");
+    
     if (window.matchMedia && !localStorage.getItem('preferred-theme')) {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            console.log("System prefers dark mode");
             // User prefers dark mode and hasn't set a theme preference
             document.body.classList.add('theme-dracula');
             
             // Update active state in menu
-            themeOptions.forEach(opt => {
+            document.querySelectorAll('.theme-option').forEach(opt => {
                 if (opt.getAttribute('data-theme') === 'dracula') {
                     opt.classList.add('active');
                 } else {
@@ -1169,11 +1548,12 @@ function checkSystemPreferences() {
                 }
             });
         } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            console.log("System prefers light mode");
             // User prefers light mode and hasn't set a theme preference
             document.body.classList.add('theme-light');
             
             // Update active state in menu
-            themeOptions.forEach(opt => {
+            document.querySelectorAll('.theme-option').forEach(opt => {
                 if (opt.getAttribute('data-theme') === 'light') {
                     opt.classList.add('active');
                 } else {
@@ -1184,15 +1564,17 @@ function checkSystemPreferences() {
     }
 }
 
-// Check system preferences after DOM is loaded
-document.addEventListener('DOMContentLoaded', checkSystemPreferences);
-
 // Listen for system preference changes
 if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        console.log("System color scheme preference changed");
         // Only change theme if user hasn't set a preference
         if (!localStorage.getItem('preferred-theme')) {
             checkSystemPreferences();
         }
     });
 }
+
+// Add debug logging for main functions
+console.log("Script initialized");
+   </script>
