@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=JetBrains+Mono:wght@300;400&family=Space+Mono&display=swap');
+        
+        :root {
+            /* Default theme (Hacker) */
+            --bg-color: #111116;
+            --text-color: #f5f5f5;
+            --accent-color: #64ffda;
+            --font-family: 'Fira Code', monospace;
+            --spacing: 2rem;
+        }
+        
+        /* Theme classes */
+        .theme-light {
+            --bg-color: #f5f5f5;
+            --text-color: #333333;
+            --accent-color: #0088cc;
+        }
+        
+        .theme-dark {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --accent-color: #bb86fc;
+        }
+        
+        .theme-synthwave {
+            --bg-color: #241b2f;
+            --text-color: #f8f8f8;
+            --accent-color: #ff7edb;
+        }
+        
+        .theme-nord {
+            --bg-color: #2e3440;
+            --text-color: #eceff4;
+            --accent-color: #88c0d0;
+        }
+        
+        .theme-solarized {
+            --bg-color: #002b36;
+            --text-color: #839496;
+            --accent-color: #b58900;
+        }
+        
+        .theme-dracula {
+            --bg-color: #282a36;
+            --text-color: #f8f8f2;
+            --accent-color: #bd93f9;
+        }
+        
+        .theme-github {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+        }
+        
+        /* Font classes with !important to ensure they override */
+        .font-fira {
+            font-family: 'Fira Code', monospace !important;
+        }
+        
+        .font-jetbrains {
+            font-family: 'JetBrains Mono', monospace !important;
+        }
+        
+        .font-space {
+            font-family: 'Space Mono', monospace !important;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing);
+            display: flex;
+            flex-direction: column;
+            min-height: 95vh;
+            transition: all 0.3s ease;
+        }
+        
+        header {
+            margin-bottom: var(--spacing);
+        }
+        
+        main {
+            flex-grow: 1;
+        }
+        
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .section {
+            margin-bottom: var(--spacing);
+        }
+        
+        .post, .link-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .date {
+            color: var(--text-color);
+            margin-right: 0.5rem;
+        }
+        
+        .separator {
+            color: var(--accent-color);
+            margin: 0 0.5rem;
+        }
+        
+        .post-title {
+            color: var(--accent-color);
+        }
+        
+        .footer-links a {
+            margin-right: 1rem;
+        }
+        
+        .theme-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+        
+        .theme-controls.collapsed {
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .toggle-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+        
+        .theme-selector, .font-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .theme-option, .font-option {
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-option:hover, .font-option:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .theme-option.active, .font-option.active {
+            border-left: 3px solid var(--accent-color);
+            padding-left: calc(0.5rem - 3px);
+        }
+        
+        .settings-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .menu-section {
+            margin-bottom: 1rem;
+        }
+        
+        .menu-section h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>yourname dot com</h1>
+    </header>
+    
+    <main>
+        <div class="section">
+            <p>heya! i'm <span style="color: var(--accent-color);">your-name</span> — [your short bio here].</p>
+            <p>if you've gotten this far, feel free to say hi wherever you find me! you can DM me on <a href="https://twitter.com/yourusername">twitter</a> or email me at yourname at gmail dot com.</p>
+        </div>
+        
+        <div class="section">
+            <h2>posts</h2>
+            <div class="post">
+                <span class="date">2025-03-20</span>
+                <span class="separator">::</span>
+                <a href="#" class="post-title">why minimalism matters</a>
+            </div>
+            <div class="post">
+                <span class="date">2024-12-15</span>
+                <span class="separator">::</span>
+                <a href="#" class="post-title">thoughts on design systems</a>
+            </div>
+            <div class="post">
+                <span class="date">2024-08-01</span>
+                <span class="separator">::</span>
+                <a href="#" class="post-title">the future of web interfaces</a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>share</h2>
+            <div class="post">
+                <span class="date">2024-11-30</span>
+                <span class="separator">::</span>
+                <a href="#" class="post-title">favorite tools</a>
+            </div>
+            <div class="post">
+                <span class="date">2024-07-15</span>
+                <span class="separator">::</span>
+                <a href="#" class="post-title">monthly reading list</a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>links</h2>
+            <div class="footer-links">
+                <a href="https://github.com/yourusername">github</a>
+                <span class="separator">::</span>
+                <a href="https://twitter.com/yourusername">twitter</a>
+                <span class="separator">::</span>
+                <a href="mailto:yourname@gmail.com">email</a>
+            </div>
+        </div>
+    </main>
+    
+    <div class="theme-controls collapsed" id="themeControls">
+        <div class="settings-icon" id="settingsIcon">⚙️</div>
+        <div class="controls-content" style="display: none;">
+            <button class="toggle-button" id="closeBtn">×</button>
+            
+            <div class="menu-section">
+                <h3>Theme</h3>
+                <div class="theme-selector">
+                    <div class="theme-option active" data-theme="default">Default</div>
+                    <div class="theme-option" data-theme="light">Light</div>
+                    <div class="theme-option" data-theme="dark">Dark</div>
+                    <div class="theme-option" data-theme="synthwave">Synthwave</div>
+                    <div class="theme-option" data-theme="nord">Nord</div>
+                    <div class="theme-option" data-theme="solarized">Solarized</div>
+                    <div class="theme-option" data-theme="dracula">Dracula</div>
+                    <div class="theme-option" data-theme="github">GitHub Dark</div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <h3>Font</h3>
+                <div class="font-selector">
+                    <div class="font-option active" data-font="fira">Fira Code</div>
+                    <div class="font-option" data-font="jetbrains">JetBrains Mono</div>
+                    <div class="font-option" data-font="space">Space Mono</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme and font switcher
+        const themeControls = document.getElementById('themeControls');
+        const settingsIcon = document.getElementById('settingsIcon');
+        const closeBtn = document.getElementById('closeBtn');
+        const controlsContent = document.querySelector('.controls-content');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const fontOptions = document.querySelectorAll('.font-option');
+        
+        // Toggle controls visibility
+        settingsIcon.addEventListener('click', function() {
+            themeControls.classList.remove('collapsed');
+            settingsIcon.style.display = 'none';
+            controlsContent.style.display = 'block';
+        });
+        
+        closeBtn.addEventListener('click', function() {
+            themeControls.classList.add('collapsed');
+            settingsIcon.style.display = 'block';
+            controlsContent.style.display = 'none';
+        });
+        
+        // Theme switching
+        themeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const theme = this.getAttribute('data-theme');
+                
+                // Remove all theme classes
+                document.body.classList.remove(
+                    'theme-light',
+                    'theme-dark',
+                    'theme-synthwave', 
+                    'theme-nord', 
+                    'theme-solarized', 
+                    'theme-dracula', 
+                    'theme-github'
+                );
+                
+                // Add selected theme class if not default
+                if (theme !== 'default') {
+                    document.body.classList.add(`theme-${theme}`);
+                }
+                
+                // Update active state
+                themeOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Font switching
+        fontOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const font = this.getAttribute('data-font');
+                
+                // Remove all font classes
+                document.body.classList.remove(
+                    'font-fira', 
+                    'font-jetbrains', 
+                    'font-space'
+                );
+                
+                // Add selected font class
+                document.body.classList.add(`font-${font}`);
+                
+                // Update active state in menu
+                fontOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Important: Actually change the font-family by applying it directly to the body
+                document.body.style.fontFamily = getFontFamily(font);
+            });
+        });
+        
+        // Helper function to get font family string
+        function getFontFamily(fontKey) {
+            switch(fontKey) {
+                case 'fira':
+                    return "'Fira Code', monospace";
+                case 'jetbrains':
+                    return "'JetBrains Mono', monospace";
+                case 'space':
+                    return "'Space Mono', monospace";
+                default:
+                    return "'Fira Code', monospace";
+            }
+        }
+        
+        // Initialize font from class if needed
+        if (document.body.classList.contains('font-jetbrains')) {
+            document.body.style.fontFamily = "'JetBrains Mono', monospace";
+        } else if (document.body.classList.contains('font-space')) {
+            document.body.style.fontFamily = "'Space Mono', monospace";
+        }
+    </script>
+</body>
+</html>
