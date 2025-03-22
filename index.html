@@ -9,7 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
         
         :root {
-            /* Default theme (Dark) - now the only theme */
+            /* Default theme (Dark) */
             --bg-color: #111116;
             --bg-secondary: #1a1a21;
             --text-color: #f5f5f5;
@@ -17,7 +17,7 @@
             --accent-color: #64ffda;
             --accent-secondary: rgba(100, 255, 218, 0.1);
             --font-family: 'Fira Code', monospace;
-            --spacing: 2rem;
+            --spacing: 1rem; /* Reduced spacing for a tighter layout */
             --border-radius: 4px;
         }
         
@@ -28,11 +28,11 @@
         }
         
         body {
-            background-color: var(--bg-color); /* Solid background color for the body */
+            background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
-            max-width: 900px;
+            max-width: 600px; /* Narrower width to match the example */
             margin: 0 auto;
             padding: var(--spacing);
             display: flex;
@@ -46,59 +46,45 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: var(--spacing);
-            padding-bottom: var(--spacing);
-            border-bottom: 1px solid var(--accent-secondary);
-            background: var(--bg-secondary); /* Solid background for readability */
+            padding-bottom: 0.5rem;
+            background: var(--bg-secondary);
             border-radius: var(--border-radius);
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.2rem; /* Smaller logo */
+            font-weight: 500;
         }
         
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem; /* Tighter gap */
         }
         
         .nav-links a {
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Smaller nav links */
         }
         
         main {
             flex-grow: 1;
-            background: var(--bg-secondary); /* Solid background for readability */
+            background: var(--bg-secondary);
             border-radius: var(--border-radius);
-            padding: 1rem;
+            padding: 0.5rem; /* Reduced padding */
         }
         
         h1, h2, h3 {
             font-weight: 500;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem; /* Smaller h1 */
         }
         
         h2 {
-            font-size: 1.4rem;
-            position: relative;
-            display: inline-block;
-            margin-top: 2rem;
-        }
-        
-        h2::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -5px;
-            width: 100%;
-            height: 2px;
-            background-color: var(--accent-color);
-            opacity: 0.5;
+            font-size: 1.2rem; /* Smaller h2 */
+            margin-top: 1rem;
         }
         
         a {
@@ -108,12 +94,12 @@
         }
         
         a:hover {
-            text-decoration: none;
             opacity: 0.8;
         }
         
         p {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem; /* Tighter paragraph spacing */
+            font-size: 0.9rem;
         }
         
         .section {
@@ -121,20 +107,20 @@
         }
         
         .post-list, .project-list, .share-list {
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
         
         .post-item, .project-item, .share-item {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem; /* Tighter spacing between items */
             font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
         
         .post-item .date, .project-item .date, .share-item .date {
             color: var(--text-secondary);
-            min-width: 100px;
+            min-width: 80px; /* Slightly smaller date width */
         }
         
         .post-item a, .project-item a, .share-item a {
@@ -155,55 +141,50 @@
             background-color: #1e1e24;
             border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
-            padding: 1rem;
-            width: 300px;
+            padding: 0.5rem; /* Tighter padding */
+            width: 250px; /* Smaller width */
             z-index: 10;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Subtler shadow */
         }
         
         .preview-box .website {
-            font-size: 0.8rem;
+            font-size: 0.7rem; /* Smaller font */
             color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
         
         .preview-box .title {
-            font-size: 1.1rem;
+            font-size: 0.9rem; /* Smaller title */
             color: var(--text-color);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
         
         .preview-box .excerpt {
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Smaller excerpt */
             color: var(--text-secondary);
         }
         
         .link-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
         }
         
-        .link-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .link-item i {
+        .link-grid a {
             margin-right: 0.5rem;
+        }
+        
+        .link-grid a:not(:last-child)::after {
+            content: ':';
+            margin-left: 0.5rem;
+            color: var(--text-color);
         }
         
         footer {
             margin-top: var(--spacing);
-            padding-top: var(--spacing);
-            border-top: 1px solid var(--accent-secondary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
+            padding-top: 0.5rem;
+            font-size: 0.8rem; /* Smaller footer text */
             color: var(--text-secondary);
-            background: var(--bg-secondary); /* Solid background for readability */
+            background: var(--bg-secondary);
             border-radius: var(--border-radius);
         }
         
@@ -215,12 +196,12 @@
         .bio-section {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 0.5rem;
         }
         
         @media (min-width: 768px) {
             .bio-section {
-                flex-direction: column; /* Remains column since profile pic is removed */
+                flex-direction: column;
             }
             
             .bio-content {
@@ -230,13 +211,12 @@
         
         .search-container {
             position: relative;
-            margin: 1rem 0;
+            margin: 0.5rem 0;
         }
         
         .search-input {
             width: 100%;
-            padding: 0.7rem 1rem;
-            padding-left: 2.5rem;
+            padding: 0.5rem 0.5rem 0.5rem 2rem; /* Adjusted padding */
             background-color: var(--bg-secondary);
             border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
@@ -279,6 +259,16 @@
             position: relative;
             overflow: hidden;
         }
+
+        .blog-post {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .blog-post h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -312,6 +302,16 @@
         <div class="section" id="posts">
             <h2>posts</h2>
             <div class="post-list">
+                <div class="post-item" data-excerpt="time complexity is a very bad model when working with parallelism.">
+                    <span class="date">2025-03-20</span>
+                    <a href="#blog-attention-is-logarithmic" data-title="attention is logarithmic, actually">attention is logarithmic, actually
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">attention is logarithmic, actually</div>
+                            <div class="excerpt">time complexity is a very bad model when working with parallelism.</div>
+                        </div>
+                    </a>
+                </div>
                 <div class="post-item" data-excerpt="Exploring how minimalism in design and code leads to better user experiences and maintainable systems.">
                     <span class="date">2025-03-20</span>
                     <a href="#" data-title="why minimalism matters">why minimalism matters
@@ -343,6 +343,23 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div class="section blog-post" id="blog-attention-is-logarithmic">
+            <h3>attention is logarithmic, actually</h3>
+            <p>time complexity is a very bad model when working with parallelism.</p>
+            <p>in which i make the case for work-depth analysis instead of time complexity.</p>
+            <p>time complexity is the default model brought up when discussing whether an algorithm is “fast” or “slow”.</p>
+            <p>back in the 80s, when every computer had only one core and no one besides a couple of weirdos knew what a SIMD was, this was largely correct.</p>
+            <p>but the year is now 2025. it is very hard to find computers with a single core. even smartphones have 4-8 cores [source needed]. as a result, time complexity largely fails as a measure of how fast or slow certain algorithms are.</p>
+            <p>using time complexity, there is no way to distinguish between an algorithm that requires O(n^3) operations that is embarrassingly parallel , versus one that is irreducibly sequential</p>
+            <p>worse yet, time complexity is sometimes still used to describe inherently parallel algorithms, such as every linear algebra operation ever.</p>
+            <p>this is ridiculous. we need a better way to think about the “complexity” of different algorithms. the work-depth model of analysis provides a good level of abstraction for thinking about the theoretical lower bound complexity of algorithms not as the number of operations with respect to input size.</p>
+            <p>instead of thinking about the raw numbers of operations an algorithm performs, or work, it’s better to think about the depth of the computation graph with respect to input size, or in other words, the minimum number of non-parallelizable sequential operations. as these are irreducibly blocking, no matter how many cores you have in your computer.</p>
+            <p>my expertise is mostly in performance engineering of ml systems, so the focus of this article will mostly relate to algorithms that apply to tensors.</p>
+            <p>this model is not perfect, and i will detail why in a later section, but to start off, the best question to ask is:</p>
+            <p>what is the time complexity of element wise multiplication?</p>
+            <p>from which we will eventually work up to my thesis, which is that vanilla attention as it is implemented in transformers, should be considered logarithmic in computational complexity.</p>
         </div>
         
         <div class="section" id="projects">
@@ -400,22 +417,15 @@
         <div class="section" id="contact">
             <h2>find me online</h2>
             <div class="link-grid">
-                <a href="https://github.com/insaan-404" class="link-item">
-                    <i class="fab fa-github"></i> github
-                </a>
-                <a href="https://x.com/musafirrr__" class="link-item">
-                    <i class="fab fa-twitter"></i> twitter
-                </a>
-                <a href="mailto:smruti45ranjan@gmail.com" class="link-item">
-                    <i class="fas fa-envelope"></i> email
-                </a>
+                <a href="https://github.com/insaan-404">github</a>
+                <a href="https://x.com/musafirrr__">twitter</a>
+                <a href="mailto:smruti45ranjan@gmail.com">email</a>
             </div>
         </div>
     </main>
     
     <footer>
         <div>© 2025 Po. Built with caffeine and curiosity.</div>
-        <div>Last updated: March 23, 2025</div>
     </footer>
 
     <script>
