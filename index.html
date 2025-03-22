@@ -748,7 +748,9 @@
     </div>
 
 
-   <script>// Theme and font switcher functionality
+   <script>
+
+       // Theme and font switcher functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Core element references - moved to top of DOMContentLoaded
     const themeControls = document.getElementById('themeControls');
@@ -765,26 +767,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Re-query post cards after possibly creating test elements
     const postCards = document.querySelectorAll('.post-card');
     
-    // Toggle controls visibility
+    // Toggle controls visibility - fixed event listeners
     if (settingsIcon) {
-        settingsIcon.addEventListener('click', function() {
+        settingsIcon.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default behavior
+            e.stopPropagation(); // Stop event propagation
             themeControls.classList.remove('collapsed');
             settingsIcon.style.display = 'none';
             controlsContent.style.display = 'block';
         });
+    } else {
+        console.warn("Settings icon element not found");
     }
     
     if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default behavior
+            e.stopPropagation(); // Stop event propagation
             themeControls.classList.add('collapsed');
             settingsIcon.style.display = 'block';
             controlsContent.style.display = 'none';
         });
+    } else {
+        console.warn("Close button element not found");
     }
+    
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (controlsContent && 
+            controlsContent.style.display === 'block' && 
+            !themeControls.contains(e.target)) {
+            themeControls.classList.add('collapsed');
+            settingsIcon.style.display = 'block';
+            controlsContent.style.display = 'none';
+        }
+    });
     
     // Theme switching
     themeOptions.forEach(option => {
-        option.addEventListener('click', function() {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent clicks from bubbling up
             const theme = this.getAttribute('data-theme');
             
             // Remove all theme classes
@@ -814,7 +836,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Font switching
     fontOptions.forEach(option => {
-        option.addEventListener('click', function() {
+        option.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent clicks from bubbling up
             const font = this.getAttribute('data-font');
             
             // Remove all font classes
@@ -843,29 +866,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (searchInput) {
         console.log("Search input found, adding event listener");
         
-        searchInput.addEventListener('input', function() {
+        // Debounce function to improve performance
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+        
+        const performSearch = debounce(function() {
             console.log("Search input event triggered");
             const searchTerm = this.value.toLowerCase().trim();
             console.log("Search term:", searchTerm);
             
             postCards.forEach(card => {
-                console.log("Processing card:", card);
-                
                 // Safely get text content (with fallbacks)
                 const title = card.querySelector('.post-title')?.textContent.toLowerCase() || '';
                 const excerpt = card.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
                 const tagElements = card.querySelectorAll('.tag');
                 const tags = Array.from(tagElements).map(tag => tag.textContent.toLowerCase());
                 
-                console.log("Card data:", { title, excerpt, tags });
-                
                 // Check if the search term is found in title, excerpt, or tags
                 const matchFound = 
                     title.includes(searchTerm) || 
                     excerpt.includes(searchTerm) || 
                     tags.some(tag => tag.includes(searchTerm));
-                
-                console.log("Match found:", matchFound);
                 
                 // Show or hide the card based on search match
                 if (searchTerm === '' || matchFound) {
@@ -874,36 +902,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'none';
                 }
             });
-        });
+        }, 300); // 300ms debounce
         
-        // Trigger a test search to ensure functionality
-        console.log("Dispatching test input event");
-        const testEvent = new Event('input', { bubbles: true });
-        searchInput.dispatchEvent(testEvent);
+        searchInput.addEventListener('input', performSearch);
     } else {
         console.warn("Search input element not found");
     }
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                // Smooth scroll to element
-                window.scrollTo({
-                    top: targetElement.offsetTop - 20,
-                    behavior: 'smooth'
-                });
-                
-                // Update URL hash without page jump
-                history.pushState(null, null, targetId);
-            }
-        });
-    });
     
     // Load theme preference
     const savedTheme = localStorage.getItem('preferred-theme');
@@ -958,34 +962,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Check if there's a hash in the URL and scroll to it
-    if (window.location.hash) {
-        const targetElement = document.querySelector(window.location.hash);
-        if (targetElement) {
-            // Slight delay to ensure page is fully loaded
-            setTimeout(() => {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 20,
-                    behavior: 'smooth'
-                });
-            }, 100);
-        }
-    }
-    
-    // Initialize animation for cards (on load)
+    // Initialize other features
+    initializeScrolling();
     animateCardsOnScroll();
-    
-    // Initialize now playing
     updateNowPlaying();
-    // Set interval for updating now playing
     setInterval(updateNowPlaying, 30000);
-    
-    // Add ripple effects and styles
     addRippleStyles();
     addRippleEffects();
-    
-    // Check system preferences
     checkSystemPreferences();
+    setupKonamiCode();
 });
 
 // Helper function to get font family string
@@ -1000,6 +985,61 @@ function getFontFamily(fontKey) {
         default:
             return "'Fira Code', monospace";
     }
+}
+
+// Initialize smooth scrolling
+function initializeScrolling() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                // Smooth scroll to element
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Update URL hash without page jump
+                history.pushState(null, null, targetId);
+            }
+        });
+    });
+    
+    // Check if there's a hash in the URL and scroll to it
+    if (window.location.hash) {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+            // Slight delay to ensure page is fully loaded
+            setTimeout(() => {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }
+}
+
+// Setup Konami code Easter egg
+function setupKonamiCode() {
+    let konamiCodeSequence = [];
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+    document.addEventListener('keydown', (e) => {
+        konamiCodeSequence.push(e.key);
+        konamiCodeSequence = konamiCodeSequence.slice(-10); // Keep only the last 10 keys
+        
+        // Check if the sequence matches the Konami code
+        if (konamiCodeSequence.join(',') === konamiCode.join(',')) {
+            console.log("Konami code activated!");
+            activateEasterEgg();
+        }
+    });
 }
 
 // Create test elements for debugging/testing purposes
@@ -1085,51 +1125,6 @@ function createTestElements() {
         });
     }
     
-    // Check if we have anchor links for testing smooth scroll
-    if (document.querySelectorAll('a[href^="#"]').length === 0) {
-        console.log('Creating test navigation links');
-        
-        const nav = document.createElement('nav');
-        nav.style.padding = '15px';
-        nav.style.marginBottom = '20px';
-        nav.style.background = '#f5f5f5';
-        nav.style.display = 'flex';
-        nav.style.gap = '15px';
-        
-        // Create section links
-        ['Home', 'About', 'Projects', 'Contact'].forEach((section, index) => {
-            // Create section first
-            const sectionEl = document.createElement('section');
-            sectionEl.id = section.toLowerCase();
-            sectionEl.style.marginTop = '50px';
-            sectionEl.style.padding = '20px';
-            sectionEl.style.minHeight = '200px';
-            sectionEl.style.background = '#f9f9f9';
-            
-            const heading = document.createElement('h2');
-            heading.textContent = section;
-            sectionEl.appendChild(heading);
-            
-            const content = document.createElement('p');
-            content.textContent = `This is the ${section} section content. It demonstrates the smooth scrolling functionality.`;
-            sectionEl.appendChild(content);
-            
-            document.body.appendChild(sectionEl);
-            
-            // Now create the nav link
-            const link = document.createElement('a');
-            link.href = `#${section.toLowerCase()}`;
-            link.textContent = section;
-            link.style.textDecoration = 'none';
-            link.style.color = '#333';
-            link.style.fontWeight = 'bold';
-            nav.appendChild(link);
-        });
-        
-        // Insert navigation at the top
-        document.body.insertBefore(nav, document.body.firstChild);
-    }
-    
     // Create search input if missing
     if (!document.getElementById('searchInput')) {
         console.log('Creating test search input');
@@ -1163,156 +1158,177 @@ function createTestElements() {
     }
     
     // Create theme controls if missing
-    if (!document.getElementById('themeControls')) {
-        console.log('Creating test theme controls');
-        
-        const themeControls = document.createElement('div');
-        themeControls.id = 'themeControls';
-        themeControls.className = 'theme-controls collapsed';
-        themeControls.style.position = 'fixed';
-        themeControls.style.top = '20px';
-        themeControls.style.right = '20px';
-        themeControls.style.background = '#fff';
-        themeControls.style.border = '1px solid #ddd';
-        themeControls.style.borderRadius = '8px';
-        themeControls.style.padding = '10px';
-        themeControls.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-        themeControls.style.zIndex = '100';
-        
-        const settingsIcon = document.createElement('div');
-        settingsIcon.id = 'settingsIcon';
-        settingsIcon.innerHTML = '⚙️';
-        settingsIcon.style.cursor = 'pointer';
-        settingsIcon.style.fontSize = '24px';
-        
-        const controlsContent = document.createElement('div');
-        controlsContent.className = 'controls-content';
-        controlsContent.style.display = 'none';
-        
-        const closeBtn = document.createElement('button');
-        closeBtn.id = 'closeBtn';
-        closeBtn.textContent = '×';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '5px';
-        closeBtn.style.right = '5px';
-        closeBtn.style.background = 'none';
-        closeBtn.style.border = 'none';
-        closeBtn.style.fontSize = '20px';
-        closeBtn.style.cursor = 'pointer';
-        
-        // Theme options
-        const themeSection = document.createElement('div');
-        themeSection.innerHTML = '<h4>Theme</h4>';
-        
-        const themesList = document.createElement('div');
-        themesList.className = 'themes-list';
-        themesList.style.display = 'flex';
-        themesList.style.flexDirection = 'column';
-        themesList.style.gap = '5px';
-        
-        const themes = ['default', 'light', 'dark', 'synthwave', 'nord', 'solarized', 'dracula', 'github'];
-        
-        themes.forEach(theme => {
-            const option = document.createElement('div');
-            option.className = 'theme-option';
-            option.setAttribute('data-theme', theme);
-            option.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
-            option.style.padding = '5px 10px';
-            option.style.cursor = 'pointer';
-            option.style.borderRadius = '4px';
-            
-            option.addEventListener('mouseover', () => {
-                option.style.background = '#f0f0f0';
-            });
-            
-            option.addEventListener('mouseout', () => {
-                if (!option.classList.contains('active')) {
-                    option.style.background = 'transparent';
-                }
-            });
-            
-            themesList.appendChild(option);
-        });
-        
-        // Font options
-        const fontSection = document.createElement('div');
-        fontSection.innerHTML = '<h4>Font</h4>';
-        
-        const fontsList = document.createElement('div');
-        fontsList.className = 'fonts-list';
-        fontsList.style.display = 'flex';
-        fontsList.style.flexDirection = 'column';
-        fontsList.style.gap = '5px';
-        
-        const fonts = ['fira', 'jetbrains', 'space'];
-        
-        fonts.forEach(font => {
-            const option = document.createElement('div');
-            option.className = 'font-option';
-            option.setAttribute('data-font', font);
-            option.textContent = font.charAt(0).toUpperCase() + font.slice(1);
-            option.style.padding = '5px 10px';
-            option.style.cursor = 'pointer';
-            option.style.borderRadius = '4px';
-            
-            option.addEventListener('mouseover', () => {
-                option.style.background = '#f0f0f0';
-            });
-            
-            option.addEventListener('mouseout', () => {
-                if (!option.classList.contains('active')) {
-                    option.style.background = 'transparent';
-                }
-            });
-            
-            fontsList.appendChild(option);
-        });
-        
-        // Assemble the controls
-        themeSection.appendChild(themesList);
-        fontSection.appendChild(fontsList);
-        
-        controlsContent.appendChild(closeBtn);
-        controlsContent.appendChild(themeSection);
-        controlsContent.appendChild(fontSection);
-        
-        themeControls.appendChild(settingsIcon);
-        themeControls.appendChild(controlsContent);
-        
-        document.body.appendChild(themeControls);
-    }
+    createThemeControls();
     
     // Create now playing if missing
-    if (!document.querySelector('.now-playing')) {
-        console.log('Creating test now playing element');
-        
-        const nowPlaying = document.createElement('div');
-        nowPlaying.className = 'now-playing';
-        nowPlaying.style.position = 'fixed';
-        nowPlaying.style.bottom = '20px';
-        nowPlaying.style.left = '20px';
-        nowPlaying.style.background = 'rgba(0,0,0,0.7)';
-        nowPlaying.style.color = 'white';
-        nowPlaying.style.padding = '10px 15px';
-        nowPlaying.style.borderRadius = '20px';
-        nowPlaying.style.fontSize = '14px';
-        nowPlaying.style.display = 'flex';
-        nowPlaying.style.alignItems = 'center';
-        nowPlaying.style.gap = '10px';
-        
-        const musicIcon = document.createElement('div');
-        musicIcon.textContent = '🎵';
-        musicIcon.style.fontSize = '20px';
-        
-        const nowPlayingTitle = document.createElement('div');
-        nowPlayingTitle.className = 'now-playing-title';
-        nowPlayingTitle.textContent = 'Loading...';
-        
-        nowPlaying.appendChild(musicIcon);
-        nowPlaying.appendChild(nowPlayingTitle);
-        
-        document.body.appendChild(nowPlaying);
+    createNowPlaying();
+}
+
+// Create theme controls
+function createThemeControls() {
+    if (document.getElementById('themeControls')) {
+        return; // Controls already exist
     }
+    
+    console.log('Creating theme controls');
+    
+    const themeControls = document.createElement('div');
+    themeControls.id = 'themeControls';
+    themeControls.className = 'theme-controls collapsed';
+    themeControls.style.position = 'fixed';
+    themeControls.style.top = '20px';
+    themeControls.style.right = '20px';
+    themeControls.style.background = '#fff';
+    themeControls.style.border = '1px solid #ddd';
+    themeControls.style.borderRadius = '8px';
+    themeControls.style.padding = '10px';
+    themeControls.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+    themeControls.style.zIndex = '100';
+    
+    const settingsIcon = document.createElement('div');
+    settingsIcon.id = 'settingsIcon';
+    settingsIcon.innerHTML = '⚙️';
+    settingsIcon.style.cursor = 'pointer';
+    settingsIcon.style.fontSize = '24px';
+    settingsIcon.style.width = '24px';
+    settingsIcon.style.height = '24px';
+    settingsIcon.style.display = 'flex';
+    settingsIcon.style.alignItems = 'center';
+    settingsIcon.style.justifyContent = 'center';
+    
+    const controlsContent = document.createElement('div');
+    controlsContent.className = 'controls-content';
+    controlsContent.style.display = 'none';
+    controlsContent.style.width = '200px';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.id = 'closeBtn';
+    closeBtn.textContent = '×';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '5px';
+    closeBtn.style.right = '5px';
+    closeBtn.style.background = 'none';
+    closeBtn.style.border = 'none';
+    closeBtn.style.fontSize = '20px';
+    closeBtn.style.cursor = 'pointer';
+    
+    // Theme options
+    const themeSection = document.createElement('div');
+    themeSection.innerHTML = '<h4>Theme</h4>';
+    
+    const themesList = document.createElement('div');
+    themesList.className = 'themes-list';
+    themesList.style.display = 'flex';
+    themesList.style.flexDirection = 'column';
+    themesList.style.gap = '5px';
+    
+    const themes = ['default', 'light', 'dark', 'synthwave', 'nord', 'solarized', 'dracula', 'github'];
+    
+    themes.forEach(theme => {
+        const option = document.createElement('div');
+        option.className = 'theme-option';
+        option.setAttribute('data-theme', theme);
+        option.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+        option.style.padding = '5px 10px';
+        option.style.cursor = 'pointer';
+        option.style.borderRadius = '4px';
+        
+        option.addEventListener('mouseover', () => {
+            option.style.background = '#f0f0f0';
+        });
+        
+        option.addEventListener('mouseout', () => {
+            if (!option.classList.contains('active')) {
+                option.style.background = 'transparent';
+            }
+        });
+        
+        themesList.appendChild(option);
+    });
+    
+    // Font options
+    const fontSection = document.createElement('div');
+    fontSection.innerHTML = '<h4>Font</h4>';
+    
+    const fontsList = document.createElement('div');
+    fontsList.className = 'fonts-list';
+    fontsList.style.display = 'flex';
+    fontsList.style.flexDirection = 'column';
+    fontsList.style.gap = '5px';
+    
+    const fonts = ['fira', 'jetbrains', 'space'];
+    
+    fonts.forEach(font => {
+        const option = document.createElement('div');
+        option.className = 'font-option';
+        option.setAttribute('data-font', font);
+        option.textContent = font.charAt(0).toUpperCase() + font.slice(1);
+        option.style.padding = '5px 10px';
+        option.style.cursor = 'pointer';
+        option.style.borderRadius = '4px';
+        
+        option.addEventListener('mouseover', () => {
+            option.style.background = '#f0f0f0';
+        });
+        
+        option.addEventListener('mouseout', () => {
+            if (!option.classList.contains('active')) {
+                option.style.background = 'transparent';
+            }
+        });
+        
+        fontsList.appendChild(option);
+    });
+    
+    // Assemble the controls
+    themeSection.appendChild(themesList);
+    fontSection.appendChild(fontsList);
+    
+    controlsContent.appendChild(closeBtn);
+    controlsContent.appendChild(themeSection);
+    controlsContent.appendChild(fontSection);
+    
+    themeControls.appendChild(settingsIcon);
+    themeControls.appendChild(controlsContent);
+    
+    document.body.appendChild(themeControls);
+}
+
+// Create now playing element
+function createNowPlaying() {
+    if (document.querySelector('.now-playing')) {
+        return; // Element already exists
+    }
+    
+    console.log('Creating now playing element');
+    
+    const nowPlaying = document.createElement('div');
+    nowPlaying.className = 'now-playing';
+    nowPlaying.style.position = 'fixed';
+    nowPlaying.style.bottom = '20px';
+    nowPlaying.style.left = '20px';
+    nowPlaying.style.background = 'rgba(0,0,0,0.7)';
+    nowPlaying.style.color = 'white';
+    nowPlaying.style.padding = '10px 15px';
+    nowPlaying.style.borderRadius = '20px';
+    nowPlaying.style.fontSize = '14px';
+    nowPlaying.style.display = 'flex';
+    nowPlaying.style.alignItems = 'center';
+    nowPlaying.style.gap = '10px';
+    nowPlaying.style.zIndex = '50';
+    
+    const musicIcon = document.createElement('div');
+    musicIcon.textContent = '🎵';
+    musicIcon.style.fontSize = '20px';
+    
+    const nowPlayingTitle = document.createElement('div');
+    nowPlayingTitle.className = 'now-playing-title';
+    nowPlayingTitle.textContent = 'Loading...';
+    
+    nowPlaying.appendChild(musicIcon);
+    nowPlaying.appendChild(nowPlayingTitle);
+    
+    document.body.appendChild(nowPlaying);
 }
 
 // Card animations on scroll
@@ -1324,15 +1340,12 @@ function animateCardsOnScroll() {
         return;
     }
     
-    console.log(`Setting up animations for ${cards.length} cards`);
-    
     // Check if IntersectionObserver is available
     if ('IntersectionObserver' in window) {
         // Create intersection observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    console.log("Card came into view", entry.target);
                     // Add animation class when card comes into view
                     entry.target.style.opacity = "1";
                     entry.target.style.transform = "translateY(0)";
@@ -1352,7 +1365,6 @@ function animateCardsOnScroll() {
         });
     } else {
         // Fallback for browsers without IntersectionObserver
-        console.log("IntersectionObserver not supported, using fallback");
         cards.forEach(card => {
             card.style.opacity = "1";
             card.style.transform = "translateY(0)";
@@ -1377,9 +1389,6 @@ function updateNowPlaying() {
     const nowPlayingElement = document.querySelector('.now-playing-title');
     if (nowPlayingElement) {
         nowPlayingElement.textContent = `${randomSong.title} - ${randomSong.artist}`;
-        console.log("Now playing updated:", nowPlayingElement.textContent);
-    } else {
-        console.warn("Now playing element not found");
     }
 }
 
@@ -1397,8 +1406,6 @@ function addRippleEffects() {
             if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
                 return;
             }
-            
-            console.log("Ripple effect triggered");
             
             // Create ripple effect
             const ripple = document.createElement('span');
@@ -1423,8 +1430,6 @@ function addRippleEffects() {
 function addRippleStyles() {
     if (document.getElementById('ripple-styles')) return;
     
-    console.log("Adding ripple styles");
-    
     const style = document.createElement('style');
     style.id = 'ripple-styles';
     style.textContent = `
@@ -1448,35 +1453,33 @@ function addRippleStyles() {
             position: relative;
             overflow: hidden;
         }
+        
+        .theme-controls {
+            transition: all 0.3s ease;
+        }
+        
+        .theme-controls.collapsed {
+            width: auto;
+        }
+        
+        #settingsIcon {
+            transition: transform 0.3s ease;
+        }
+        
+        #settingsIcon:hover {
+            transform: rotate(45deg);
+        }
     `;
     document.head.appendChild(style);
 }
 
-// Easter egg - Konami code
-let konamiCodeSequence = [];
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
-document.addEventListener('keydown', (e) => {
-    konamiCodeSequence.push(e.key);
-    konamiCodeSequence = konamiCodeSequence.slice(-10); // Keep only the last 10 keys
-    
-    console.log("Konami sequence updated:", konamiCodeSequence);
-    
-    // Check if the sequence matches the Konami code
-    if (konamiCodeSequence.join(',') === konamiCode.join(',')) {
-        console.log("Konami code activated!");
-        activateEasterEgg();
-    }
-});
-
+// Easter egg activation function
 function activateEasterEgg() {
     // Check if already activated
     if (document.body.classList.contains('konami-activated')) return;
     
     // Easter egg activated!
     document.body.classList.add('konami-activated');
-    
-    console.log("Easter egg activated");
     
     // Create a custom notification
     const notification = document.createElement('div');
@@ -1531,24 +1534,20 @@ function activateEasterEgg() {
 
 // Dark mode detection and automatic theme switching
 function checkSystemPreferences() {
-    console.log("Checking system preferences for theme");
-    
     if (window.matchMedia && !localStorage.getItem('preferred-theme')) {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            console.log("System prefers dark mode");
             // User prefers dark mode and hasn't set a theme preference
-            document.body.classList.add('theme-dracula');
+            document.body.classList.add('theme-dark');
             
             // Update active state in menu
             document.querySelectorAll('.theme-option').forEach(opt => {
-                if (opt.getAttribute('data-theme') === 'dracula') {
+                if (opt.getAttribute('data-theme') === 'dark') {
                     opt.classList.add('active');
                 } else {
                     opt.classList.remove('active');
                 }
             });
         } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-            console.log("System prefers light mode");
             // User prefers light mode and hasn't set a theme preference
             document.body.classList.add('theme-light');
             
@@ -1562,19 +1561,23 @@ function checkSystemPreferences() {
             });
         }
     }
+    
+    // Listen for system preference changes
+    if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            // Only change theme if user hasn't set a preference
+            if (!localStorage.getItem('preferred-theme')) {
+                if (event.matches) {
+                    // Switch to dark theme
+                    document.body.classList.remove('theme-light');
+                    document.body.classList.add('theme-dark');
+                } else {
+                    // Switch to light theme
+                    document.body.classList.remove('theme-dark');
+                    document.body.classList.add('theme-light');
+                }
+            }
+        });
+    }
 }
-
-// Listen for system preference changes
-if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-        console.log("System color scheme preference changed");
-        // Only change theme if user hasn't set a preference
-        if (!localStorage.getItem('preferred-theme')) {
-            checkSystemPreferences();
-        }
-    });
-}
-
-// Add debug logging for main functions
-console.log("Script initialized");
    </script>
