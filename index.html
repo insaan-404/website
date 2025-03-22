@@ -3,63 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name</title>
+    <title>Your Name - Personal Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=JetBrains+Mono:wght@300;400&family=Space+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap');
         
         :root {
             /* Default theme (Hacker) */
             --bg-color: #111116;
+            --bg-secondary: #1a1a21;
             --text-color: #f5f5f5;
+            --text-secondary: #aaaaaa;
             --accent-color: #64ffda;
+            --accent-secondary: rgba(100, 255, 218, 0.1);
             --font-family: 'Fira Code', monospace;
             --spacing: 2rem;
+            --border-radius: 4px;
         }
         
         /* Theme classes */
         .theme-light {
             --bg-color: #f5f5f5;
+            --bg-secondary: #e0e0e0;
             --text-color: #333333;
+            --text-secondary: #666666;
             --accent-color: #0088cc;
+            --accent-secondary: rgba(0, 136, 204, 0.1);
         }
         
         .theme-dark {
             --bg-color: #121212;
+            --bg-secondary: #1e1e1e;
             --text-color: #e0e0e0;
+            --text-secondary: #a0a0a0;
             --accent-color: #bb86fc;
+            --accent-secondary: rgba(187, 134, 252, 0.1);
         }
         
         .theme-synthwave {
             --bg-color: #241b2f;
+            --bg-secondary: #2d2241;
             --text-color: #f8f8f8;
+            --text-secondary: #c0b6c8;
             --accent-color: #ff7edb;
+            --accent-secondary: rgba(255, 126, 219, 0.1);
         }
         
         .theme-nord {
             --bg-color: #2e3440;
+            --bg-secondary: #3b4252;
             --text-color: #eceff4;
+            --text-secondary: #d8dee9;
             --accent-color: #88c0d0;
+            --accent-secondary: rgba(136, 192, 208, 0.1);
         }
         
         .theme-solarized {
             --bg-color: #002b36;
+            --bg-secondary: #073642;
             --text-color: #839496;
+            --text-secondary: #586e75;
             --accent-color: #b58900;
+            --accent-secondary: rgba(181, 137, 0, 0.1);
         }
         
         .theme-dracula {
             --bg-color: #282a36;
+            --bg-secondary: #1e2029;
             --text-color: #f8f8f2;
+            --text-secondary: #bfbfbf;
             --accent-color: #bd93f9;
+            --accent-secondary: rgba(189, 147, 249, 0.1);
         }
         
         .theme-github {
             --bg-color: #0d1117;
+            --bg-secondary: #161b22;
             --text-color: #c9d1d9;
+            --text-secondary: #8b949e;
             --accent-color: #58a6ff;
+            --accent-secondary: rgba(88, 166, 255, 0.1);
         }
         
-        /* Font classes with !important to ensure they override */
+        /* Font classes */
         .font-fira {
             font-family: 'Fira Code', monospace !important;
         }
@@ -72,22 +98,43 @@
             font-family: 'Space Mono', monospace !important;
         }
         
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: var(--spacing);
             display: flex;
             flex-direction: column;
-            min-height: 95vh;
+            min-height: 100vh;
             transition: all 0.3s ease;
         }
         
         header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: var(--spacing);
+            padding-bottom: var(--spacing);
+            border-bottom: 1px solid var(--accent-secondary);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .nav-links a {
+            margin-left: 1rem;
+            font-size: 0.9rem;
         }
         
         main {
@@ -95,7 +142,30 @@
         }
         
         h1, h2, h3 {
-            font-weight: normal;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            position: relative;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            opacity: 0.5;
         }
         
         a {
@@ -105,19 +175,102 @@
         }
         
         a:hover {
-            text-decoration: underline;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        
+        p {
+            margin-bottom: 1rem;
         }
         
         .section {
             margin-bottom: var(--spacing);
         }
         
-        .post, .link-item {
-            margin-bottom: 0.5rem;
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
         }
         
-        .date {
-            color: var(--text-color);
+        .post-card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .post-title {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .post-read {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+        
+        .post-read i {
+            margin-left: 0.3rem;
+            font-size: 0.8rem;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .tag {
+            background-color: var(--accent-secondary);
+            color: var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+        }
+        
+        .link-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .link-item i {
             margin-right: 0.5rem;
         }
         
@@ -126,8 +279,15 @@
             margin: 0 0.5rem;
         }
         
-        .post-title {
-            color: var(--accent-color);
+        footer {
+            margin-top: var(--spacing);
+            padding-top: var(--spacing);
+            border-top: 1px solid var(--accent-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
         
         .footer-links a {
@@ -138,17 +298,18 @@
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            background-color: rgba(30, 30, 30, 0.8);
-            border-radius: 0.5rem;
-            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 1rem;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-secondary);
             z-index: 100;
             transition: all 0.3s ease;
             max-width: 300px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
         
         .theme-controls.collapsed {
@@ -166,10 +327,10 @@
             border: none;
             color: var(--text-color);
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
+            top: 0.7rem;
+            right: 0.7rem;
         }
         
         .theme-selector, .font-selector {
@@ -180,9 +341,11 @@
         
         .theme-option, .font-option {
             padding: 0.5rem;
-            border-radius: 0.25rem;
+            border-radius: var(--border-radius);
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
         }
         
         .theme-option:hover, .font-option:hover {
@@ -192,11 +355,17 @@
         .theme-option.active, .font-option.active {
             border-left: 3px solid var(--accent-color);
             padding-left: calc(0.5rem - 3px);
+            background-color: var(--accent-secondary);
         }
         
         .settings-icon {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .menu-section {
@@ -205,193 +374,761 @@
         
         .menu-section h3 {
             margin-top: 0;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             opacity: 0.7;
         }
+        
+        .bio-highlight {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+        
+        .bio-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .bio-section {
+                flex-direction: row;
+            }
+            
+            .bio-content {
+                flex: 2;
+            }
+            
+            .bio-image {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+        
+        .search-container {
+            position: relative;
+            margin: 1rem 0;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            padding-left: 2.5rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--accent-secondary);
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .color-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .color-default { background-color: #64ffda; }
+        .color-light { background-color: #0088cc; }
+        .color-dark { background-color: #bb86fc; }
+        .color-synthwave { background-color: #ff7edb; }
+        .color-nord { background-color: #88c0d0; }
+        .color-solarized { background-color: #b58900; }
+        .color-dracula { background-color: #bd93f9; }
+        .color-github { background-color: #58a6ff; }
+        
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            background-color: var(--bg-secondary);
+            max-width: fit-content;
+        }
+        
+        .now-playing-icon {
+            color: var(--accent-color);
+            font-size: 1rem;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .now-playing-text {
+            font-size: 0.85rem;
+        }
+        
+        .now-playing-title {
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>yourname dot com</h1>
+        <div class="logo">yourname.dev</div>
+        <nav class="nav-links">
+            <a href="#posts">blog</a>
+            <a href="#projects">projects</a>
+            <a href="#about">about</a>
+            <a href="#contact">contact</a>
+        </nav>
     </header>
     
     <main>
-        <div class="section">
-            <p>heya! i'm <span style="color: var(--accent-color);">your-name</span> — [your short bio here].</p>
-            <p>if you've gotten this far, feel free to say hi wherever you find me! you can DM me on <a href="https://twitter.com/yourusername">twitter</a> or email me at yourname at gmail dot com.</p>
-        </div>
-        
-        <div class="section">
-            <h2>posts</h2>
-            <div class="post">
-                <span class="date">2025-03-20</span>
-                <span class="separator">::</span>
-                <a href="#" class="post-title">why minimalism matters</a>
-            </div>
-            <div class="post">
-                <span class="date">2024-12-15</span>
-                <span class="separator">::</span>
-                <a href="#" class="post-title">thoughts on design systems</a>
-            </div>
-            <div class="post">
-                <span class="date">2024-08-01</span>
-                <span class="separator">::</span>
-                <a href="#" class="post-title">the future of web interfaces</a>
+        <div class="section" id="about">
+            <div class="bio-section">
+                <div class="bio-content">
+                    <h1>hey, i'm <span class="bio-highlight">your-name</span></h1>
+                    <p>I'm a [your role] specializing in [your specialty]. Currently focused on building [current project/focus]. Passionate about [your interests] and always looking to learn more about [topics you're interested in].</p>
+                    
+                    <p>if you've gotten this far, feel free to say hi wherever you find me! you can DM me on <a href="https://twitter.com/yourusername">twitter</a> or email me at <a href="mailto:yourname@gmail.com">yourname@gmail.com</a>.</p>
+                    
+                    <div class="now-playing">
+                        <div class="now-playing-icon"><i class="fas fa-headphones"></i></div>
+                        <div class="now-playing-text">
+                            now playing: <span class="now-playing-title">favorite song - artist</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bio-image">
+                    <img src="/api/placeholder/150/150" alt="Profile" class="profile-img">
+                </div>
             </div>
         </div>
         
-        <div class="section">
-            <h2>share</h2>
-            <div class="post">
-                <span class="date">2024-11-30</span>
-                <span class="separator">::</span>
-                <a href="#" class="post-title">favorite tools</a>
-            </div>
-            <div class="post">
-                <span class="date">2024-07-15</span>
-                <span class="separator">::</span>
-                <a href="#" class="post-title">monthly reading list</a>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="search posts..." id="searchInput">
+        </div>
+        
+        <div class="section" id="posts">
+            <h2>latest posts</h2>
+            <div class="post-grid">
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>March 20, 2025</span>
+                        <span>5 min read</span>
+                    </div>
+                    <div class="post-title">why minimalism matters</div>
+                    <div class="post-excerpt">Exploring how minimalism in design and code leads to better user experiences and maintainable systems.</div>
+                    <div class="tags">
+                        <span class="tag">design</span>
+                        <span class="tag">philosophy</span>
+                    </div>
+                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>December 15, 2024</span>
+                        <span>8 min read</span>
+                    </div>
+                    <div class="post-title">thoughts on design systems</div>
+                    <div class="post-excerpt">How design systems are changing the way we build and maintain large-scale applications.</div>
+                    <div class="tags">
+                        <span class="tag">design</span>
+                        <span class="tag">systems</span>
+                        <span class="tag">ui</span>
+                    </div>
+                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>August 1, 2024</span>
+                        <span>10 min read</span>
+                    </div>
+                    <div class="post-title">the future of web interfaces</div>
+                    <div class="post-excerpt">Exploring emerging patterns and technologies that will shape the next generation of web experiences.</div>
+                    <div class="tags">
+                        <span class="tag">web</span>
+                        <span class="tag">future</span>
+                        <span class="tag">ui</span>
+                    </div>
+                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
         
-        <div class="section">
-            <h2>links</h2>
-            <div class="footer-links">
-                <a href="https://github.com/yourusername">github</a>
-                <span class="separator">::</span>
-                <a href="https://twitter.com/yourusername">twitter</a>
-                <span class="separator">::</span>
-                <a href="mailto:yourname@gmail.com">email</a>
+        <div class="section" id="projects">
+            <h2>projects</h2>
+            <div class="post-grid">
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>ongoing</span>
+                        <span><i class="fab fa-github"></i></span>
+                    </div>
+                    <div class="post-title">project name</div>
+                    <div class="post-excerpt">A brief description of this awesome project and what problems it solves.</div>
+                    <div class="tags">
+                        <span class="tag">javascript</span>
+                        <span class="tag">react</span>
+                    </div>
+                    <a href="#" class="post-read">view project <i class="fas fa-external-link-alt"></i></a>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>2024</span>
+                        <span><i class="fab fa-github"></i></span>
+                    </div>
+                    <div class="post-title">another project</div>
+                    <div class="post-excerpt">What this project does and the technologies used to build it.</div>
+                    <div class="tags">
+                        <span class="tag">typescript</span>
+                        <span class="tag">node</span>
+                    </div>
+                    <a href="#" class="post-read">view project <i class="fas fa-external-link-alt"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="share">
+            <h2>knowledge share</h2>
+            <div class="post-grid">
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>November 30, 2024</span>
+                        <span><i class="fas fa-toolbox"></i></span>
+                    </div>
+                    <div class="post-title">favorite tools</div>
+                    <div class="post-excerpt">A curated collection of tools that have improved my workflow and productivity.</div>
+                    <div class="tags">
+                        <span class="tag">tools</span>
+                        <span class="tag">productivity</span>
+                    </div>
+                    <a href="#" class="post-read">explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="post-card">
+                    <div class="post-meta">
+                        <span>July 15, 2024</span>
+                        <span><i class="fas fa-book"></i></span>
+                    </div>
+                    <div class="post-title">monthly reading list</div>
+                    <div class="post-excerpt">Books, articles, and papers that have been influential in my thinking recently.</div>
+                    <div class="tags">
+                        <span class="tag">reading</span>
+                        <span class="tag">resources</span>
+                    </div>
+                    <a href="#" class="post-read">explore <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section" id="contact">
+            <h2>find me online</h2>
+            <div class="link-grid">
+                <a href="https://github.com/yourusername" class="link-item">
+                    <i class="fab fa-github"></i> github
+                </a>
+                <a href="https://twitter.com/yourusername" class="link-item">
+                    <i class="fab fa-twitter"></i> twitter
+                </a>
+                <a href="mailto:yourname@gmail.com" class="link-item">
+                    <i class="fas fa-envelope"></i> email
+                </a>
+                <a href="https://linkedin.com/in/yourusername" class="link-item">
+                    <i class="fab fa-linkedin"></i> linkedin
+                </a>
             </div>
         </div>
     </main>
     
+    <footer>
+        <div>© 2025 your-name. Built with caffeine and curiosity.</div>
+        <div>Last updated: March 23, 2025</div>
+    </footer>
+    
     <div class="theme-controls collapsed" id="themeControls">
-        <div class="settings-icon" id="settingsIcon">⚙️</div>
+        <div class="settings-icon" id="settingsIcon"><i class="fas fa-cog"></i></div>
         <div class="controls-content" style="display: none;">
             <button class="toggle-button" id="closeBtn">×</button>
             
             <div class="menu-section">
                 <h3>Theme</h3>
                 <div class="theme-selector">
-                    <div class="theme-option active" data-theme="default">Default</div>
-                    <div class="theme-option" data-theme="light">Light</div>
-                    <div class="theme-option" data-theme="dark">Dark</div>
-                    <div class="theme-option" data-theme="synthwave">Synthwave</div>
-                    <div class="theme-option" data-theme="nord">Nord</div>
-                    <div class="theme-option" data-theme="solarized">Solarized</div>
-                    <div class="theme-option" data-theme="dracula">Dracula</div>
-                    <div class="theme-option" data-theme="github">GitHub Dark</div>
+                    <div class="theme-option active" data-theme="default">
+                        <span class="color-circle color-default"></span>Default (Hacker)
+                    </div>
+                    <div class="theme-option" data-theme="light">
+                        <span class="color-circle color-light"></span>Light
+                    </div>
+                    <div class="theme-option" data-theme="dark">
+                        <span class="color-circle color-dark"></span>Dark
+                    </div>
+                    <div class="theme-option" data-theme="synthwave">
+                        <span class="color-circle color-synthwave"></span>Synthwave
+                    </div>
+                    <div class="theme-option" data-theme="nord">
+                        <span class="color-circle color-nord"></span>Nord
+                    </div>
+                    <div class="theme-option" data-theme="solarized">
+                        <span class="color-circle color-solarized"></span>Solarized
+                    </div>
+                    <div class="theme-option" data-theme="dracula">
+                        <span class="color-circle color-dracula"></span>Dracula
+                    </div>
+                    <div class="theme-option" data-theme="github">
+                        <span class="color-circle color-github"></span>GitHub Dark
+                    </div>
                 </div>
             </div>
             
             <div class="menu-section">
                 <h3>Font</h3>
                 <div class="font-selector">
-                    <div class="font-option active" data-font="fira">Fira Code</div>
-                    <div class="font-option" data-font="jetbrains">JetBrains Mono</div>
-                    <div class="font-option" data-font="space">Space Mono</div>
+                    <div class="font-option active" data-font="fira">
+                        <i class="fas fa-font"></i> Fira Code
+                    </div>
+                    <div class="font-option" data-font="jetbrains">
+                        <i class="fas fa-font"></i> JetBrains Mono
+                    </div>
+                    <div class="font-option" data-font="space">
+                        <i class="fas fa-font"></i> Space Mono
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Theme and font switcher
-        const themeControls = document.getElementById('themeControls');
-        const settingsIcon = document.getElementById('settingsIcon');
-        const closeBtn = document.getElementById('closeBtn');
-        const controlsContent = document.querySelector('.controls-content');
-        const themeOptions = document.querySelectorAll('.theme-option');
-        const fontOptions = document.querySelectorAll('.font-option');
+// Theme and font switcher functionality
+const themeControls = document.getElementById('themeControls');
+const settingsIcon = document.getElementById('settingsIcon');
+const closeBtn = document.getElementById('closeBtn');
+const controlsContent = document.querySelector('.controls-content');
+const themeOptions = document.querySelectorAll('.theme-option');
+const fontOptions = document.querySelectorAll('.font-option');
+const searchInput = document.getElementById('searchInput');
+const postCards = document.querySelectorAll('.post-card');
+
+// Toggle controls visibility
+settingsIcon.addEventListener('click', function() {
+    themeControls.classList.remove('collapsed');
+    settingsIcon.style.display = 'none';
+    controlsContent.style.display = 'block';
+});
+
+closeBtn.addEventListener('click', function() {
+    themeControls.classList.add('collapsed');
+    settingsIcon.style.display = 'block';
+    controlsContent.style.display = 'none';
+});
+
+// Theme switching
+themeOptions.forEach(option => {
+    option.addEventListener('click', function() {
+        const theme = this.getAttribute('data-theme');
         
-        // Toggle controls visibility
-        settingsIcon.addEventListener('click', function() {
-            themeControls.classList.remove('collapsed');
-            settingsIcon.style.display = 'none';
-            controlsContent.style.display = 'block';
-        });
+        // Remove all theme classes
+        document.body.classList.remove(
+            'theme-light',
+            'theme-dark',
+            'theme-synthwave', 
+            'theme-nord', 
+            'theme-solarized', 
+            'theme-dracula', 
+            'theme-github'
+        );
         
-        closeBtn.addEventListener('click', function() {
-            themeControls.classList.add('collapsed');
-            settingsIcon.style.display = 'block';
-            controlsContent.style.display = 'none';
-        });
+        // Add selected theme class if not default
+        if (theme !== 'default') {
+            document.body.classList.add(`theme-${theme}`);
+        }
         
-        // Theme switching
-        themeOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const theme = this.getAttribute('data-theme');
-                
-                // Remove all theme classes
-                document.body.classList.remove(
-                    'theme-light',
-                    'theme-dark',
-                    'theme-synthwave', 
-                    'theme-nord', 
-                    'theme-solarized', 
-                    'theme-dracula', 
-                    'theme-github'
-                );
-                
-                // Add selected theme class if not default
-                if (theme !== 'default') {
-                    document.body.classList.add(`theme-${theme}`);
-                }
-                
-                // Update active state
-                themeOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
+        // Update active state
+        themeOptions.forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Save preference to localStorage
+        localStorage.setItem('preferred-theme', theme);
+    });
+});
+
+// Font switching
+fontOptions.forEach(option => {
+    option.addEventListener('click', function() {
+        const font = this.getAttribute('data-font');
+        
+        // Remove all font classes
+        document.body.classList.remove(
+            'font-fira', 
+            'font-jetbrains', 
+            'font-space'
+        );
+        
+        // Add selected font class
+        document.body.classList.add(`font-${font}`);
+        
+        // Update active state in menu
+        fontOptions.forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Apply font directly
+        document.body.style.fontFamily = getFontFamily(font);
+        
+        // Save preference to localStorage
+        localStorage.setItem('preferred-font', font);
+    });
+});
+
+// Helper function to get font family string
+function getFontFamily(fontKey) {
+    switch(fontKey) {
+        case 'fira':
+            return "'Fira Code', monospace";
+        case 'jetbrains':
+            return "'JetBrains Mono', monospace";
+        case 'space':
+            return "'Space Mono', monospace";
+        default:
+            return "'Fira Code', monospace";
+    }
+}
+
+// Search functionality
+searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase().trim();
+    
+    postCards.forEach(card => {
+        const title = card.querySelector('.post-title').textContent.toLowerCase();
+        const excerpt = card.querySelector('.post-excerpt').textContent.toLowerCase();
+        const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+        
+        // Check if the search term is found in title, excerpt, or tags
+        const matchFound = 
+            title.includes(searchTerm) || 
+            excerpt.includes(searchTerm) || 
+            tags.some(tag => tag.includes(searchTerm));
+        
+        // Show or hide the card based on search match
+        if (searchTerm === '' || matchFound) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+            // Smooth scroll to element
+            window.scrollTo({
+                top: targetElement.offsetTop - 20,
+                behavior: 'smooth'
             });
-        });
+            
+            // Update URL hash without page jump
+            history.pushState(null, null, targetId);
+        }
+    });
+});
+
+// Load saved preferences from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    // Load theme preference
+    const savedTheme = localStorage.getItem('preferred-theme');
+    if (savedTheme) {
+        // Remove all theme classes
+        document.body.classList.remove(
+            'theme-light',
+            'theme-dark',
+            'theme-synthwave', 
+            'theme-nord', 
+            'theme-solarized', 
+            'theme-dracula', 
+            'theme-github'
+        );
         
-        // Font switching
-        fontOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const font = this.getAttribute('data-font');
-                
-                // Remove all font classes
-                document.body.classList.remove(
-                    'font-fira', 
-                    'font-jetbrains', 
-                    'font-space'
-                );
-                
-                // Add selected font class
-                document.body.classList.add(`font-${font}`);
-                
-                // Update active state in menu
-                fontOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Important: Actually change the font-family by applying it directly to the body
-                document.body.style.fontFamily = getFontFamily(font);
-            });
-        });
+        // Apply saved theme
+        if (savedTheme !== 'default') {
+            document.body.classList.add(`theme-${savedTheme}`);
+        }
         
-        // Helper function to get font family string
-        function getFontFamily(fontKey) {
-            switch(fontKey) {
-                case 'fira':
-                    return "'Fira Code', monospace";
-                case 'jetbrains':
-                    return "'JetBrains Mono', monospace";
-                case 'space':
-                    return "'Space Mono', monospace";
-                default:
-                    return "'Fira Code', monospace";
+        // Update active state in menu
+        themeOptions.forEach(opt => {
+            if (opt.getAttribute('data-theme') === savedTheme) {
+                opt.classList.add('active');
+            } else {
+                opt.classList.remove('active');
             }
+        });
+    }
+    
+    // Load font preference
+    const savedFont = localStorage.getItem('preferred-font');
+    if (savedFont) {
+        // Remove all font classes
+        document.body.classList.remove(
+            'font-fira', 
+            'font-jetbrains', 
+            'font-space'
+        );
+        
+        // Apply saved font
+        document.body.classList.add(`font-${savedFont}`);
+        document.body.style.fontFamily = getFontFamily(savedFont);
+        
+        // Update active state in menu
+        fontOptions.forEach(opt => {
+            if (opt.getAttribute('data-font') === savedFont) {
+                opt.classList.add('active');
+            } else {
+                opt.classList.remove('active');
+            }
+        });
+    }
+    
+    // Check if there's a hash in the URL and scroll to it
+    if (window.location.hash) {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+            // Slight delay to ensure page is fully loaded
+            setTimeout(() => {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }
+    
+    // Initialize animation for cards (on load)
+    animateCardsOnScroll();
+});
+
+// Card animations on scroll
+function animateCardsOnScroll() {
+    const cards = document.querySelectorAll('.post-card');
+    
+    // Create intersection observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add animation class when card comes into view
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    // Set initial state and observe each card
+    cards.forEach(card => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(20px)";
+        card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        observer.observe(card);
+    });
+}
+
+// Currently playing song functionality - simulated for now
+// You could replace this with an actual API call to a music service
+function updateNowPlaying() {
+    const songs = [
+        { title: "Weightless", artist: "Marconi Union" },
+        { title: "Strobe", artist: "deadmau5" },
+        { title: "Intro", artist: "The xx" },
+        { title: "Midnight City", artist: "M83" },
+        { title: "Genesis", artist: "Justice" }
+    ];
+    
+    // Get random song from the list
+    const randomSong = songs[Math.floor(Math.random() * songs.length)];
+    
+    // Update the now playing element
+    const nowPlayingElement = document.querySelector('.now-playing-title');
+    if (nowPlayingElement) {
+        nowPlayingElement.textContent = `${randomSong.title} - ${randomSong.artist}`;
+    }
+}
+
+// Update the "now playing" song every 30 seconds
+updateNowPlaying();
+setInterval(updateNowPlaying, 30000);
+
+// Click effects - subtle pulse on buttons and links
+document.querySelectorAll('a, .theme-option, .font-option, .toggle-button').forEach(element => {
+    element.addEventListener('click', function(e) {
+        // Don't add the effect for links that trigger smooth scrolling
+        if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
+            return;
         }
         
-        // Initialize font from class if needed
-        if (document.body.classList.contains('font-jetbrains')) {
-            document.body.style.fontFamily = "'JetBrains Mono', monospace";
-        } else if (document.body.classList.contains('font-space')) {
-            document.body.style.fontFamily = "'Space Mono', monospace";
+        // Create ripple effect
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple-effect');
+        
+        // Position the ripple where clicked
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+        
+        // Add and then remove the ripple
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
+
+// Add CSS for ripple effect
+const style = document.createElement('style');
+style.textContent = `
+    .ripple-effect {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple {
+        to {
+            transform: scale(2);
+            opacity: 0;
         }
-    </script>
-</body>
-</html>
+    }
+    
+    a, .theme-option, .font-option, .toggle-button {
+        position: relative;
+        overflow: hidden;
+    }
+`;
+document.head.appendChild(style);
+
+// Easter egg - Konami code
+let konamiCodeSequence = [];
+const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+document.addEventListener('keydown', (e) => {
+    konamiCodeSequence.push(e.key);
+    konamiCodeSequence = konamiCodeSequence.slice(-10); // Keep only the last 10 keys
+    
+    // Check if the sequence matches the Konami code
+    if (konamiCodeSequence.join(',') === konamiCode.join(',')) {
+        // Easter egg activated!
+        document.body.classList.add('konami-activated');
+        
+        // Create a custom notification
+        const notification = document.createElement('div');
+        notification.className = 'easter-egg-notification';
+        notification.textContent = '🎮 Level up! Developer mode activated!';
+        document.body.appendChild(notification);
+        
+        // Remove notification after a few seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+        
+        // Apply special Easter egg styles
+        const easterEggStyle = document.createElement('style');
+        easterEggStyle.textContent = `
+            .easter-egg-notification {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--accent-color);
+                color: var(--bg-color);
+                padding: 10px 20px;
+                border-radius: 5px;
+                z-index: 1000;
+                opacity: 1;
+                transition: opacity 0.5s;
+                font-weight: bold;
+            }
+            
+            .konami-activated .post-card:hover {
+                animation: rainbow-border 2s linear infinite;
+            }
+            
+            @keyframes rainbow-border {
+                0% { box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
+                14% { box-shadow: 0 5px 15px rgba(255, 127, 0, 0.3); }
+                28% { box-shadow: 0 5px 15px rgba(255, 255, 0, 0.3); }
+                42% { box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3); }
+                57% { box-shadow: 0 5px 15px rgba(0, 0, 255, 0.3); }
+                71% { box-shadow: 0 5px 15px rgba(75, 0, 130, 0.3); }
+                85% { box-shadow: 0 5px 15px rgba(148, 0, 211, 0.3); }
+                100% { box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
+            }
+        `;
+        document.head.appendChild(easterEggStyle);
+    }
+});
+
+// Dark mode detection and automatic theme switching
+if (window.matchMedia && !localStorage.getItem('preferred-theme')) {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // User prefers dark mode and hasn't set a theme preference
+        document.body.classList.add('theme-dracula');
+        
+        // Update active state in menu
+        themeOptions.forEach(opt => {
+            if (opt.getAttribute('data-theme') === 'dracula') {
+                opt.classList.add('active');
+            } else {
+                opt.classList.remove('active');
+            }
+        });
+    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        // User prefers light mode and hasn't set a theme preference
+        document.body.classList.add('theme-light');
+        
+        // Update active state in menu
+        themeOptions.forEach(opt => {
+            if (opt.getAttribute('data-theme') === 'light') {
+                opt.classList.add('active');
+            } else {
+                opt.classList.remove('active');
+            }
+        });
+    }
+}
