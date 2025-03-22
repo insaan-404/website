@@ -32,13 +32,14 @@
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
-            max-width: 600px;
+            max-width: 800px; /* Increased width */
             margin: 0 auto;
             padding: var(--spacing);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             position: relative;
+            font-size: 1.1rem; /* Increased base font size */
             /* Starry Night-inspired background */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 1080' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
             background-size: cover;
@@ -58,7 +59,7 @@
         }
         
         .logo {
-            font-size: 1.2rem;
+            font-size: 1.4rem; /* Increased font size */
             font-weight: 500;
         }
         
@@ -69,7 +70,7 @@
         }
         
         .nav-links a {
-            font-size: 0.85rem;
+            font-size: 1rem; /* Increased font size */
         }
         
         main {
@@ -85,16 +86,16 @@
         }
         
         h1 {
-            font-size: 1.5rem;
+            font-size: 2rem; /* Increased font size */
         }
         
         h2 {
-            font-size: 1.2rem;
+            font-size: 1.5rem; /* Increased font size */
             margin-top: 1rem;
         }
         
         h3 {
-            font-size: 1rem;
+            font-size: 1.3rem; /* Increased font size */
         }
         
         a {
@@ -109,7 +110,7 @@
         
         p {
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 1.1rem; /* Increased font size */
         }
         
         .section {
@@ -133,101 +134,35 @@
             border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
             padding: 0.5rem;
-            width: 250px;
+            width: 300px; /* Increased width */
             z-index: 10;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
         
         .preview-box .website {
-            font-size: 0.7rem;
+            font-size: 0.9rem; /* Increased font size */
             color: var(--text-secondary);
             margin-bottom: 0.3rem;
         }
         
         .preview-box .title {
-            font-size: 0.9rem;
+            font-size: 1.1rem; /* Increased font size */
             color: var(--text-color);
             margin-bottom: 0.3rem;
         }
         
         .preview-box .excerpt {
-            font-size: 0.8rem;
+            font-size: 1rem; /* Increased font size */
             color: var(--text-secondary);
-        }
-        
-        .link-grid {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-        
-        .link-grid a {
-            margin-right: 0.5rem;
-        }
-        
-        .link-grid a:not(:last-child)::after {
-            content: ':';
-            margin-left: 0.5rem;
-            color: var(--text-color);
         }
         
         footer {
             margin-top: var(--spacing);
             padding-top: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 1rem; /* Increased font size */
             color: var(--text-secondary);
             background: rgba(26, 26, 33, 0.9);
             border-radius: var(--border-radius);
-        }
-        
-        .bio-highlight {
-            color: var(--accent-color);
-            font-weight: 500;
-        }
-        
-        .bio-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        @media (min-width: 768px) {
-            .bio-section {
-                flex-direction: column;
-            }
-            
-            .bio-content {
-                flex: 1;
-            }
-        }
-        
-        .search-container {
-            position: relative;
-            margin: 0.5rem 0;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 0.5rem 0.5rem 0.5rem 2rem;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--accent-secondary);
-            border-radius: var(--border-radius);
-            color: var(--text-color);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 0.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
         }
         
         .ripple-effect {
@@ -253,7 +188,7 @@
 
         .blog-post {
             margin-top: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 1.1rem; /* Increased font size */
         }
     </style>
 </head>
@@ -269,22 +204,6 @@
     </header>
     
     <main>
-        <div class="section" id="about">
-            <div class="bio-section">
-                <div class="bio-content">
-                    <h1>hey, i'm <span class="bio-highlight">Po</span></h1>
-                    <p>I'm a <span class="bio-highlight">Maths Student</span> specializing in <span class="bio-highlight">Machine Learning</span>. Currently focused on <span class="bio-highlight">studying</span>. Passionate about <span class="bio-highlight">maths and machine learning</span> and always looking to learn more about <span class="bio-highlight">machine learning</span>.</p>
-                    
-                    <p>if you've gotten this far, feel free to say hi wherever you find me! you can DM me on <a href="https://x.com/musafirrr__">twitter</a> or email me at <a href="mailto:smruti45ranjan@gmail.com">smruti45ranjan@gmail.com</a>.</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="search posts..." id="searchInput">
-        </div>
-        
         <div class="section blog-post" id="blog-attention-is-logarithmic">
             <h3>attention is logarithmic, actually</h3>
             <p>time complexity is a very bad model when working with parallelism.</p>
@@ -307,15 +226,6 @@
             <p>what is the time complexity of element wise multiplication?</p>
             <p>from which we will eventually work up to my thesis, which is that vanilla attention as it is implemented in transformers, should be considered logarithmic in computational complexity.</p>
         </div>
-
-        <div class="section" id="contact">
-            <h2>find me online</h2>
-            <div class="link-grid">
-                <a href="https://github.com/insaan-404">github</a>
-                <a href="https://x.com/musafirrr__">twitter</a>
-                <a href="mailto:smruti45ranjan@gmail.com">email</a>
-            </div>
-        </div>
     </main>
     
     <footer>
@@ -324,39 +234,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const blogPost = document.querySelector('.blog-post');
-
-            // Search functionality (for future blog posts)
-            if (searchInput) {
-                function debounce(func, wait) {
-                    let timeout;
-                    return function() {
-                        const context = this;
-                        const args = arguments;
-                        clearTimeout(timeout);
-                        timeout = setTimeout(() => func.apply(context, args), wait);
-                    };
-                }
-                
-                const performSearch = debounce(function() {
-                    const searchTerm = this.value.toLowerCase().trim();
-                    const paragraphs = blogPost.querySelectorAll('p');
-                    let matchFound = false;
-                    
-                    paragraphs.forEach(p => {
-                        const text = p.textContent.toLowerCase();
-                        if (text.includes(searchTerm)) {
-                            matchFound = true;
-                        }
-                    });
-
-                    blogPost.style.display = (searchTerm === '' || matchFound) ? 'block' : 'none';
-                }, 300);
-                
-                searchInput.addEventListener('input', performSearch);
-            }
-
             addRippleEffects();
             setupKonamiCode();
         });
