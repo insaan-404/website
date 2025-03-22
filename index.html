@@ -28,7 +28,7 @@
         }
         
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-color); /* Solid background color for the body */
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
@@ -39,12 +39,6 @@
             flex-direction: column;
             min-height: 100vh;
             position: relative;
-            /* Starry Night-inspired background */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 1080' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
         }
         
         header {
@@ -54,7 +48,7 @@
             margin-bottom: var(--spacing);
             padding-bottom: var(--spacing);
             border-bottom: 1px solid var(--accent-secondary);
-            background: rgba(17, 17, 22, 0.8); /* Semi-transparent background for readability */
+            background: var(--bg-secondary); /* Solid background for readability */
             border-radius: var(--border-radius);
         }
         
@@ -75,7 +69,7 @@
         
         main {
             flex-grow: 1;
-            background: rgba(17, 17, 22, 0.8); /* Semi-transparent background for readability */
+            background: var(--bg-secondary); /* Solid background for readability */
             border-radius: var(--border-radius);
             padding: 1rem;
         }
@@ -126,75 +120,62 @@
             margin-bottom: var(--spacing);
         }
         
-        .post-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+        .post-list, .project-list, .share-list {
             margin-top: 1rem;
         }
         
-        .post-card {
-            background-color: var(--bg-secondary);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .post-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        
-        .post-title {
-            color: var(--accent-color);
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .post-excerpt {
-            color: var(--text-secondary);
+        .post-item, .project-item, .share-item {
+            margin-bottom: 0.5rem;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-        
-        .post-read {
-            display: inline-flex;
-            align-items: center;
-            font-size: 0.85rem;
-            margin-top: auto;
-        }
-        
-        .post-read i {
-            margin-left: 0.3rem;
-            font-size: 0.8rem;
-        }
-        
-        .tags {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            align-items: center;
+            gap: 1rem;
         }
         
-        .tag {
-            background-color: var(--accent-secondary);
-            color: var(--accent-color);
-            padding: 0.2rem 0.6rem;
+        .post-item .date, .project-item .date, .share-item .date {
+            color: var(--text-secondary);
+            min-width: 100px;
+        }
+        
+        .post-item a, .project-item a, .share-item a {
+            position: relative;
+        }
+        
+        .post-item a:hover .preview-box,
+        .project-item a:hover .preview-box,
+        .share-item a:hover .preview-box {
+            display: block;
+        }
+        
+        .preview-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #1e1e24;
+            border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
+            padding: 1rem;
+            width: 300px;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .preview-box .website {
             font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-box .title {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-box .excerpt {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
         
         .link-grid {
@@ -222,7 +203,7 @@
             align-items: center;
             font-size: 0.9rem;
             color: var(--text-secondary);
-            background: rgba(17, 17, 22, 0.8); /* Semi-transparent background for readability */
+            background: var(--bg-secondary); /* Solid background for readability */
             border-radius: var(--border-radius);
         }
         
@@ -239,11 +220,11 @@
         
         @media (min-width: 768px) {
             .bio-section {
-                flex-direction: column; /* Changed to column since profile pic is removed */
+                flex-direction: column; /* Remains column since profile pic is removed */
             }
             
             .bio-content {
-                flex: 1; /* Adjusted since there's no bio-image section */
+                flex: 1;
             }
         }
         
@@ -329,116 +310,89 @@
         </div>
         
         <div class="section" id="posts">
-            <h2>latest posts</h2>
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>March 20, 2025</span>
-                        <span>5 min read</span>
-                    </div>
-                    <div class="post-title">why minimalism matters</div>
-                    <div class="post-excerpt">Exploring how minimalism in design and code leads to better user experiences and maintainable systems.</div>
-                    <div class="tags">
-                        <span class="tag">design</span>
-                        <span class="tag">philosophy</span>
-                    </div>
-                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+            <h2>posts</h2>
+            <div class="post-list">
+                <div class="post-item" data-excerpt="Exploring how minimalism in design and code leads to better user experiences and maintainable systems.">
+                    <span class="date">2025-03-20</span>
+                    <a href="#" data-title="why minimalism matters">why minimalism matters
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">why minimalism matters</div>
+                            <div class="excerpt">Exploring how minimalism in design and code leads to better user experiences and maintainable systems.</div>
+                        </div>
+                    </a>
                 </div>
-                
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>December 15, 2024</span>
-                        <span>8 min read</span>
-                    </div>
-                    <div class="post-title">thoughts on design systems</div>
-                    <div class="post-excerpt">How design systems are changing the way we build and maintain large-scale applications.</div>
-                    <div class="tags">
-                        <span class="tag">design</span>
-                        <span class="tag">systems</span>
-                        <span class="tag">ui</span>
-                    </div>
-                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+                <div class="post-item" data-excerpt="How design systems are changing the way we build and maintain large-scale applications.">
+                    <span class="date">2024-12-15</span>
+                    <a href="#" data-title="thoughts on design systems">thoughts on design systems
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">thoughts on design systems</div>
+                            <div class="excerpt">How design systems are changing the way we build and maintain large-scale applications.</div>
+                        </div>
+                    </a>
                 </div>
-                
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>August 1, 2024</span>
-                        <span>10 min read</span>
-                    </div>
-                    <div class="post-title">the future of web interfaces</div>
-                    <div class="post-excerpt">Exploring emerging patterns and technologies that will shape the next generation of web experiences.</div>
-                    <div class="tags">
-                        <span class="tag">web</span>
-                        <span class="tag">future</span>
-                        <span class="tag">ui</span>
-                    </div>
-                    <a href="#" class="post-read">read more <i class="fas fa-arrow-right"></i></a>
+                <div class="post-item" data-excerpt="Exploring emerging patterns and technologies that will shape the next generation of web experiences.">
+                    <span class="date">2024-08-01</span>
+                    <a href="#" data-title="the future of web interfaces">the future of web interfaces
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">the future of web interfaces</div>
+                            <div class="excerpt">Exploring emerging patterns and technologies that will shape the next generation of web experiences.</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
         
         <div class="section" id="projects">
             <h2>projects</h2>
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>ongoing</span>
-                        <span><i class="fab fa-github"></i></span>
-                    </div>
-                    <div class="post-title">ML Maths Explorer</div>
-                    <div class="post-excerpt">A tool to explore mathematical concepts in machine learning.</div>
-                    <div class="tags">
-                        <span class="tag">python</span>
-                        <span class="tag">machine-learning</span>
-                    </div>
-                    <a href="https://mlmathsexplorer.netlify.app" class="post-read">view project <i class="fas fa-external-link-alt"></i></a>
+            <div class="project-list">
+                <div class="project-item" data-excerpt="A tool to explore mathematical concepts in machine learning.">
+                    <span class="date">ongoing</span>
+                    <a href="https://mlmathsexplorer.netlify.app" data-title="ML Maths Explorer">ML Maths Explorer
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">ML Maths Explorer</div>
+                            <div class="excerpt">A tool to explore mathematical concepts in machine learning.</div>
+                        </div>
+                    </a>
                 </div>
-                
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>2024</span>
-                        <span><i class="fab fa-github"></i></span>
-                    </div>
-                    <div class="post-title">Random ML Generator</div>
-                    <div class="post-excerpt">A tool to generate random ML model visualizations.</div>
-                    <div class="tags">
-                        <span class="tag">python</span>
-                        <span class="tag">data-science</span>
-                    </div>
-                    <a href="https://randommlgenix.com" class="post-read">view project <i class="fas fa-external-link-alt"></i></a>
+                <div class="project-item" data-excerpt="A tool to generate random ML model visualizations.">
+                    <span class="date">2024</span>
+                    <a href="https://randommlgenix.com" data-title="Random ML Generator">Random ML Generator
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">Random ML Generator</div>
+                            <div class="excerpt">A tool to generate random ML model visualizations.</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
         
         <div class="section" id="share">
             <h2>knowledge share</h2>
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>November 30, 2024</span>
-                        <span><i class="fas fa-toolbox"></i></span>
-                    </div>
-                    <div class="post-title">favorite tools</div>
-                    <div class="post-excerpt">A curated collection of tools that have improved my workflow and productivity.</div>
-                    <div class="tags">
-                        <span class="tag">tools</span>
-                        <span class="tag">productivity</span>
-                    </div>
-                    <a href="#" class="post-read">explore <i class="fas fa-arrow-right"></i></a>
+            <div class="share-list">
+                <div class="share-item" data-excerpt="A curated collection of tools that have improved my workflow and productivity.">
+                    <span class="date">2024-11-30</span>
+                    <a href="#" data-title="favorite tools">favorite tools
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">favorite tools</div>
+                            <div class="excerpt">A curated collection of tools that have improved my workflow and productivity.</div>
+                        </div>
+                    </a>
                 </div>
-                
-                <div class="post-card">
-                    <div class="post-meta">
-                        <span>July 15, 2024</span>
-                        <span><i class="fas fa-book"></i></span>
-                    </div>
-                    <div class="post-title">monthly reading list</div>
-                    <div class="post-excerpt">Books, articles, and papers that have been influential in my thinking recently.</div>
-                    <div class="tags">
-                        <span class="tag">reading</span>
-                        <span class="tag">resources</span>
-                    </div>
-                    <a href="#" class="post-read">explore <i class="fas fa-arrow-right"></i></a>
+                <div class="share-item" data-excerpt="Books, articles, and papers that have been influential in my thinking recently.">
+                    <span class="date">2024-07-15</span>
+                    <a href="#" data-title="monthly reading list">monthly reading list
+                        <div class="preview-box">
+                            <div class="website">po.dev</div>
+                            <div class="title">monthly reading list</div>
+                            <div class="excerpt">Books, articles, and papers that have been influential in my thinking recently.</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -467,7 +421,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
-            const postCards = document.querySelectorAll('.post-card');
+            const postItems = document.querySelectorAll('.post-item');
+            const projectItems = document.querySelectorAll('.project-item');
+            const shareItems = document.querySelectorAll('.share-item');
 
             // Search functionality
             if (searchInput) {
@@ -483,13 +439,29 @@
                 
                 const performSearch = debounce(function() {
                     const searchTerm = this.value.toLowerCase().trim();
-                    postCards.forEach(card => {
-                        const title = card.querySelector('.post-title')?.textContent.toLowerCase() || '';
-                        const excerpt = card.querySelector('.post-excerpt')?.textContent.toLowerCase() || '';
-                        const tagElements = card.querySelectorAll('.tag');
-                        const tags = Array.from(tagElements).map(tag => tag.textContent.toLowerCase());
-                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm) || tags.some(tag => tag.includes(searchTerm));
-                        card.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                    
+                    // Search posts
+                    postItems.forEach(item => {
+                        const title = item.querySelector('a')?.textContent.toLowerCase() || '';
+                        const excerpt = item.dataset.excerpt?.toLowerCase() || '';
+                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
+                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                    });
+
+                    // Search projects
+                    projectItems.forEach(item => {
+                        const title = item.querySelector('a')?.textContent.toLowerCase() || '';
+                        const excerpt = item.dataset.excerpt?.toLowerCase() || '';
+                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
+                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                    });
+
+                    // Search knowledge share
+                    shareItems.forEach(item => {
+                        const title = item.querySelector('a')?.textContent.toLowerCase() || '';
+                        const excerpt = item.dataset.excerpt?.toLowerCase() || '';
+                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
+                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
                     });
                 }, 300);
                 
@@ -497,7 +469,6 @@
             }
 
             initializeScrolling();
-            animateCardsOnScroll();
             addRippleEffects();
             setupKonamiCode();
         });
@@ -540,32 +511,6 @@
                     activateEasterEgg();
                 }
             });
-        }
-
-        function animateCardsOnScroll() {
-            const cards = document.querySelectorAll('.post-card');
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = "1";
-                            entry.target.style.transform = "translateY(0)";
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                cards.forEach(card => {
-                    card.style.opacity = "0";
-                    card.style.transform = "translateY(20px)";
-                    card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-                    observer.observe(card);
-                });
-            } else {
-                cards.forEach(card => {
-                    card.style.opacity = "1";
-                    card.style.transform = "translateY(0)";
-                });
-            }
         }
 
         function addRippleEffects() {
@@ -613,19 +558,6 @@
                     opacity: 1;
                     transition: opacity 0.5s;
                     font-weight: bold;
-                }
-                .konami-activated .post-card:hover {
-                    animation: rainbow-border 2s linear infinite;
-                }
-                @keyframes rainbow-border {
-                    0% { box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
-                    14% { box-shadow: 0 5px 15px rgba(255, 127, 0, 0.3); }
-                    28% { box-shadow: 0 5px 15px rgba(255, 255, 0, 0.3); }
-                    42% { box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3); }
-                    57% { box-shadow: 0 5px 15px rgba(0, 0, 255, 0.3); }
-                    71% { box-shadow: 0 5px 15px rgba(75, 0, 130, 0.3); }
-                    85% { box-shadow: 0 5px 15px rgba(148, 0, 211, 0.3); }
-                    100% { box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); }
                 }
             `;
             document.head.appendChild(easterEggStyle);
