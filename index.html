@@ -17,7 +17,7 @@
             --accent-color: #64ffda;
             --accent-secondary: rgba(100, 255, 218, 0.1);
             --font-family: 'Fira Code', monospace;
-            --spacing: 1rem; /* Reduced spacing for a tighter layout */
+            --spacing: 1rem;
             --border-radius: 4px;
         }
         
@@ -32,13 +32,19 @@
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
-            max-width: 600px; /* Narrower width to match the example */
+            max-width: 600px;
             margin: 0 auto;
             padding: var(--spacing);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             position: relative;
+            /* Starry Night-inspired background */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 1080' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         
         header {
@@ -47,30 +53,30 @@
             align-items: center;
             margin-bottom: var(--spacing);
             padding-bottom: 0.5rem;
-            background: var(--bg-secondary);
+            background: rgba(26, 26, 33, 0.9); /* Semi-transparent for readability */
             border-radius: var(--border-radius);
         }
         
         .logo {
-            font-size: 1.2rem; /* Smaller logo */
+            font-size: 1.2rem;
             font-weight: 500;
         }
         
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 0.5rem; /* Tighter gap */
+            gap: 0.5rem;
         }
         
         .nav-links a {
-            font-size: 0.85rem; /* Smaller nav links */
+            font-size: 0.85rem;
         }
         
         main {
             flex-grow: 1;
-            background: var(--bg-secondary);
+            background: rgba(26, 26, 33, 0.9); /* Semi-transparent for readability */
             border-radius: var(--border-radius);
-            padding: 0.5rem; /* Reduced padding */
+            padding: 0.5rem;
         }
         
         h1, h2, h3 {
@@ -79,11 +85,11 @@
         }
         
         h1 {
-            font-size: 1.5rem; /* Smaller h1 */
+            font-size: 1.5rem;
         }
         
         h2 {
-            font-size: 1.2rem; /* Smaller h2 */
+            font-size: 1.2rem;
             margin-top: 1rem;
         }
         
@@ -98,7 +104,7 @@
         }
         
         p {
-            margin-bottom: 0.5rem; /* Tighter paragraph spacing */
+            margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
         
@@ -111,7 +117,7 @@
         }
         
         .post-item, .project-item, .share-item {
-            margin-bottom: 0.3rem; /* Tighter spacing between items */
+            margin-bottom: 0.3rem;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
@@ -120,7 +126,7 @@
         
         .post-item .date, .project-item .date, .share-item .date {
             color: var(--text-secondary);
-            min-width: 80px; /* Slightly smaller date width */
+            min-width: 80px;
         }
         
         .post-item a, .project-item a, .share-item a {
@@ -141,26 +147,26 @@
             background-color: #1e1e24;
             border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
-            padding: 0.5rem; /* Tighter padding */
-            width: 250px; /* Smaller width */
+            padding: 0.5rem;
+            width: 250px;
             z-index: 10;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Subtler shadow */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
         
         .preview-box .website {
-            font-size: 0.7rem; /* Smaller font */
+            font-size: 0.7rem;
             color: var(--text-secondary);
             margin-bottom: 0.3rem;
         }
         
         .preview-box .title {
-            font-size: 0.9rem; /* Smaller title */
+            font-size: 0.9rem;
             color: var(--text-color);
             margin-bottom: 0.3rem;
         }
         
         .preview-box .excerpt {
-            font-size: 0.8rem; /* Smaller excerpt */
+            font-size: 0.8rem;
             color: var(--text-secondary);
         }
         
@@ -182,9 +188,9 @@
         footer {
             margin-top: var(--spacing);
             padding-top: 0.5rem;
-            font-size: 0.8rem; /* Smaller footer text */
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            background: var(--bg-secondary);
+            background: rgba(26, 26, 33, 0.9); /* Semi-transparent for readability */
             border-radius: var(--border-radius);
         }
         
@@ -216,7 +222,7 @@
         
         .search-input {
             width: 100%;
-            padding: 0.5rem 0.5rem 0.5rem 2rem; /* Adjusted padding */
+            padding: 0.5rem 0.5rem 0.5rem 2rem;
             background-color: var(--bg-secondary);
             border: 1px solid var(--accent-secondary);
             border-radius: var(--border-radius);
@@ -259,16 +265,6 @@
             position: relative;
             overflow: hidden;
         }
-
-        .blog-post {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .blog-post h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
     </style>
 </head>
 <body>
@@ -304,7 +300,7 @@
             <div class="post-list">
                 <div class="post-item" data-excerpt="time complexity is a very bad model when working with parallelism.">
                     <span class="date">2025-03-20</span>
-                    <a href="#blog-attention-is-logarithmic" data-title="attention is logarithmic, actually">attention is logarithmic, actually
+                    <a href="blog.html" data-title="attention is logarithmic, actually">attention is logarithmic, actually
                         <div class="preview-box">
                             <div class="website">po.dev</div>
                             <div class="title">attention is logarithmic, actually</div>
@@ -343,23 +339,6 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-        <div class="section blog-post" id="blog-attention-is-logarithmic">
-            <h3>attention is logarithmic, actually</h3>
-            <p>time complexity is a very bad model when working with parallelism.</p>
-            <p>in which i make the case for work-depth analysis instead of time complexity.</p>
-            <p>time complexity is the default model brought up when discussing whether an algorithm is “fast” or “slow”.</p>
-            <p>back in the 80s, when every computer had only one core and no one besides a couple of weirdos knew what a SIMD was, this was largely correct.</p>
-            <p>but the year is now 2025. it is very hard to find computers with a single core. even smartphones have 4-8 cores [source needed]. as a result, time complexity largely fails as a measure of how fast or slow certain algorithms are.</p>
-            <p>using time complexity, there is no way to distinguish between an algorithm that requires O(n^3) operations that is embarrassingly parallel , versus one that is irreducibly sequential</p>
-            <p>worse yet, time complexity is sometimes still used to describe inherently parallel algorithms, such as every linear algebra operation ever.</p>
-            <p>this is ridiculous. we need a better way to think about the “complexity” of different algorithms. the work-depth model of analysis provides a good level of abstraction for thinking about the theoretical lower bound complexity of algorithms not as the number of operations with respect to input size.</p>
-            <p>instead of thinking about the raw numbers of operations an algorithm performs, or work, it’s better to think about the depth of the computation graph with respect to input size, or in other words, the minimum number of non-parallelizable sequential operations. as these are irreducibly blocking, no matter how many cores you have in your computer.</p>
-            <p>my expertise is mostly in performance engineering of ml systems, so the focus of this article will mostly relate to algorithms that apply to tensors.</p>
-            <p>this model is not perfect, and i will detail why in a later section, but to start off, the best question to ask is:</p>
-            <p>what is the time complexity of element wise multiplication?</p>
-            <p>from which we will eventually work up to my thesis, which is that vanilla attention as it is implemented in transformers, should be considered logarithmic in computational complexity.</p>
         </div>
         
         <div class="section" id="projects">
