@@ -57,19 +57,20 @@
         .background-art {
             width: 100%;
             height: 200px;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 1080' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
+            /* Re-encoded Starry Night SVG data URL */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
             z-index: 1;
+            /* Debugging: Add a border to confirm the div is rendering */
+            border-bottom: 2px solid var(--accent-color);
         }
 
         /* In light theme, adjust the background art's appearance */
         body.light-theme .background-art {
-            /* Keep the same background image, but adjust opacity or add a filter for better contrast */
-            opacity: 0.8; /* Slightly reduce opacity in light mode */
-            /* Optional: Add a filter to make the art lighter */
+            opacity: 0.8;
             filter: brightness(1.2);
         }
         
@@ -474,28 +475,19 @@
             const shareItems = document.querySelectorAll('.share-item');
             const themeToggle = document.querySelector('.theme-toggle');
 
+            // Force dark mode on page load for testing
+            document.body.classList.remove('light-theme');
+            themeToggle.querySelector('i').classList.add('fa-moon');
+            themeToggle.querySelector('i').classList.remove('fa-sun');
+            localStorage.setItem('theme', 'dark'); // Reset theme in localStorage
+
             // Theme toggle functionality
             function toggleTheme() {
                 const body = document.body;
                 const isLightTheme = body.classList.toggle('light-theme');
-                // Update the icon based on the theme
                 themeToggle.querySelector('i').classList.toggle('fa-moon', !isLightTheme);
                 themeToggle.querySelector('i').classList.toggle('fa-sun', isLightTheme);
-                // Save the theme preference to localStorage
                 localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
-            }
-
-            // Load the saved theme from localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                themeToggle.querySelector('i').classList.remove('fa-moon');
-                themeToggle.querySelector('i').classList.add('fa-sun');
-            } else {
-                // Ensure dark mode is the default if no theme is saved
-                document.body.classList.remove('light-theme');
-                themeToggle.querySelector('i').classList.add('fa-moon');
-                themeToggle.querySelector('i').classList.remove('fa-sun');
             }
 
             // Add event listener for theme toggle
@@ -516,7 +508,6 @@
                 const performSearch = debounce(function() {
                     const searchTerm = this.value.toLowerCase().trim();
                     
-                    // Search posts
                     postItems.forEach(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
@@ -524,7 +515,6 @@
                         item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
                     });
 
-                    // Search projects
                     projectItems.forEach(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
@@ -532,7 +522,6 @@
                         item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
                     });
 
-                    // Search knowledge share
                     shareItems.forEach(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
