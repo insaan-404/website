@@ -69,7 +69,7 @@
             color: var(--text-color);
             font-size: 1.2rem;
             cursor: pointer;
-            transition: transform 0.2s ease, background 0.3s ease, border 0.3s ease;
+            transition: transform 0.2s ease, background 0.3s ease, border 0.3s ease, filter 0.3s ease;
             z-index: 1000;
         }
 
@@ -265,6 +265,7 @@
             position: relative;
             margin: 0.5rem 0;
             z-index: 3;
+            transition: transform 0.3s ease;
         }
         
         .search-input {
@@ -276,13 +277,12 @@
             color: var(--text-color);
             font-family: var(--font-family);
             font-size: 1.1rem;
-            transition: all 0.2s ease, transform 0.3s ease;
+            transition: all 0.2s ease, box-shadow 0.3s ease;
         }
         
         .search-input:focus {
             outline: none;
             border-color: var(--accent-color);
-            transform: scale(1.05);
         }
         
         .search-icon {
@@ -330,14 +330,18 @@
         }
 
         /* Blur background when search bar is focused */
-        body.search-active main,
+        body.search-active main > *:not(.search-container),
         body.search-active footer,
         body.search-active .theme-toggle {
             filter: blur(5px);
+            transition: filter 0.3s ease;
         }
 
         body.search-active .search-container {
-            filter: none;
+            position: relative;
+            z-index: 10;
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
         }
         
         .ripple-effect {
@@ -541,11 +545,13 @@
             if (searchInput && searchDropdown) {
                 searchInput.addEventListener('focus', function() {
                     document.body.classList.add('search-active');
+                    this.style.boxShadow = '0 0 10px var(--accent-color)';
                     updateSearchResults(this.value);
                 });
 
                 searchInput.addEventListener('blur', function() {
                     document.body.classList.remove('search-active');
+                    this.style.boxShadow = 'none';
                     setTimeout(() => {
                         searchDropdown.classList.remove('active');
                     }, 200);
