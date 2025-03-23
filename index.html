@@ -335,6 +335,13 @@
             background-color: var(--accent-secondary);
         }
         
+        /* Add styles for active search result */
+        .search-result.active {
+            background-color: var(--accent-secondary);
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+        
         /* Blur background when search bar is focused */
         body.search-active main > *:not(.search-container),
         body.search-active footer,
@@ -517,19 +524,32 @@
             const shareItems = document.querySelectorAll('.share-item');
             const themeToggle = document.querySelector('.theme-toggle');
 
-            // Force dark mode on page load
+            // For keyboard navigation
+            let selectedIndex = -1;
+            let searchResults = [];
+
+            // Force dark mode on page load (no localStorage)
             document.body.classList.remove('light-theme');
             themeToggle.querySelector('i').classList.add('fa-moon');
             themeToggle.querySelector('i').classList.remove('fa-sun');
-            localStorage.setItem('theme', 'dark');
+            
+            // Theme variable to track current theme
+            let isDarkTheme = true;
 
-            // Theme toggle functionality
+            // Theme toggle functionality without localStorage
             function toggleTheme() {
                 const body = document.body;
-                const isLightTheme = body.classList.toggle('light-theme');
-                themeToggle.querySelector('i').classList.toggle('fa-moon', !isLightTheme);
-                themeToggle.querySelector('i').classList.toggle('fa-sun', isLightTheme);
-                localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
+                isDarkTheme = !isDarkTheme;
+                
+                if (isDarkTheme) {
+                    body.classList.remove('light-theme');
+                    themeToggle.querySelector('i').classList.add('fa-moon');
+                    themeToggle.querySelector('i').classList.remove('fa-sun');
+                } else {
+                    body.classList.add('light-theme');
+                    themeToggle.querySelector('i').classList.remove('fa-moon');
+                    themeToggle.querySelector('i').classList.add('fa-sun');
+                }
             }
 
             themeToggle.addEventListener('click', toggleTheme);
@@ -550,6 +570,59 @@
                     }, 200);
                 });
 
+                // Add keyboard event listener for arrow navigation
+                searchInput.addEventListener('keydown', function(e) {
+                    // Only process if dropdown is active
+                    if (!searchDropdown.classList.contains('active')) return;
+                    
+                    // Get all search result elements
+                    searchResults = searchDropdown.querySelectorAll('.search-result');
+                    if (searchResults.length === 0) return;
+                    
+                    switch (e.key) {
+                        case 'ArrowDown':
+                            e.preventDefault(); // Prevent scrolling
+                            selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1);
+                            highlightSelectedResult();
+                            break;
+                        case 'ArrowUp':
+                            e.preventDefault(); // Prevent scrolling
+                            selectedIndex = Math.max(selectedIndex - 1, 0);
+                            highlightSelectedResult();
+                            break;
+                        case 'Enter':
+                            // If an item is selected, navigate to its link
+                            if (selectedIndex >= 0 && selectedIndex < searchResults.length) {
+                                e.preventDefault();
+                                searchResults[selectedIndex].click();
+                            }
+                            break;
+                        case 'Escape':
+                            // Close dropdown
+                            searchDropdown.classList.remove('active');
+                            selectedIndex = -1;
+                            break;
+                    }
+                });
+
+                function highlightSelectedResult() {
+                    // Remove 'active' class from all results
+                    searchResults.forEach(result => {
+                        result.classList.remove('active');
+                    });
+                    
+                    // Add 'active' class to the selected result
+                    if (selectedIndex >= 0 && selectedIndex < searchResults.length) {
+                        searchResults[selectedIndex].classList.add('active');
+                        
+                        // Ensure the selected item is visible in the dropdown
+                        searchResults[selectedIndex].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }
+                }
+
                 function debounce(func, wait) {
                     let timeout;
                     return function() {
@@ -563,6 +636,8 @@
                 const updateSearchResults = debounce(function(searchTerm) {
                     searchTerm = searchTerm.toLowerCase().trim();
                     searchDropdown.innerHTML = '';
+                    // Reset selected index when updating results
+                    selectedIndex = -1;
 
                     const allItems = [...postItems, ...projectItems, ...shareItems];
                     const matchingItems = allItems.filter(item => {
@@ -597,6 +672,14 @@
                             window.location.href = link;
                         });
                         
+                        // Add mouse events to update selected index
+                        resultDiv.addEventListener('mouseenter', function() {
+                            // Find index of this result
+                            const resultElements = Array.from(searchDropdown.querySelectorAll('.search-result'));
+                            selectedIndex = resultElements.indexOf(this);
+                            highlightSelectedResult();
+                        });
+                        
                         searchDropdown.appendChild(resultDiv);
                     });
 
@@ -608,6 +691,9 @@
                         const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
                         item.style.display = matchFound ? 'flex' : 'none';
                     });
+                    
+                    // Update search results array
+                    searchResults = searchDropdown.querySelectorAll('.search-result');
                 }, 300);
 
                 searchInput.addEventListener('input', function() {
@@ -631,10 +717,16 @@
                             top: targetElement.offsetTop - 20,
                             behavior: 'smooth'
                         });
-                        history.pushState(null, null, targetId);
+                        // Using history API might be restricted in a sandbox too
+                        try {
+                            history.pushState(null, null, targetId);
+                        } catch (e) {
+                            // Silently fail if history API is not available
+                        }
                     }
                 });
             });
+            
             if (window.location.hash) {
                 const targetElement = document.querySelector(window.location.hash);
                 if (targetElement) {
