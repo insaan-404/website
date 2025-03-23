@@ -50,28 +50,26 @@
             min-height: 100vh;
             position: relative;
             font-size: 1.1rem;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease, filter 0.3s ease;
         }
 
         /* Background art container at the top */
         .background-art {
             width: 100%;
             height: 200px;
-            /* Re-encoded Starry Night SVG data URL */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
+            /* Fallback gradient to confirm the div renders */
+            background-image: linear-gradient(to bottom, #111116, #333);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
             z-index: 1;
-            /* Debugging: Add a border to confirm the div is rendering */
-            border-bottom: 2px solid var(--accent-color);
+            border-bottom: 2px solid var(--accent-color); /* Debugging border */
         }
 
         /* In light theme, adjust the background art's appearance */
         body.light-theme .background-art {
-            opacity: 0.8;
-            filter: brightness(1.2);
+            background-image: linear-gradient(to bottom, #e0e0e0, #ccc);
         }
         
         /* Theme toggle button (floating) */
@@ -104,6 +102,7 @@
             padding: 1rem;
             position: relative;
             z-index: 2;
+            transition: filter 0.3s ease;
         }
         
         h1, h2, h3 {
@@ -134,11 +133,28 @@
         a {
             color: var(--accent-color);
             text-decoration: none;
+            position: relative;
             transition: all 0.2s ease;
         }
         
         a:hover {
             opacity: 0.8;
+        }
+
+        /* Animated underline effect on hover */
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        a:hover::after {
+            width: 100%;
         }
         
         p {
@@ -237,6 +253,7 @@
             font-size: 1rem;
             color: var(--text-secondary);
             text-align: center;
+            transition: filter 0.3s ease;
         }
         
         footer div {
@@ -267,6 +284,7 @@
         .search-container {
             position: relative;
             margin: 0.5rem 0;
+            z-index: 3; /* Ensure search bar is above blurred background */
         }
         
         .search-input {
@@ -278,12 +296,13 @@
             color: var(--text-color);
             font-family: var(--font-family);
             font-size: 1.1rem;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease, transform 0.3s ease;
         }
         
         .search-input:focus {
             outline: none;
             border-color: var(--accent-color);
+            transform: scale(1.05); /* Pop effect on focus */
         }
         
         .search-icon {
@@ -292,6 +311,18 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
+        }
+        
+        /* Blur background when search bar is focused */
+        .search-active .background-art,
+        .search-active main,
+        .search-active footer,
+        .search-active .theme-toggle {
+            filter: blur(5px);
+        }
+
+        .search-active .search-container {
+            filter: none; /* Ensure search bar remains sharp */
         }
         
         .ripple-effect {
@@ -310,7 +341,7 @@
             }
         }
 
-        /* Pop effect animation */
+        /* Pop effect animation for links */
         @keyframes pop {
             0% {
                 transform: scale(1);
@@ -479,7 +510,7 @@
             document.body.classList.remove('light-theme');
             themeToggle.querySelector('i').classList.add('fa-moon');
             themeToggle.querySelector('i').classList.remove('fa-sun');
-            localStorage.setItem('theme', 'dark'); // Reset theme in localStorage
+            localStorage.setItem('theme', 'dark');
 
             // Theme toggle functionality
             function toggleTheme() {
@@ -490,11 +521,18 @@
                 localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
             }
 
-            // Add event listener for theme toggle
             themeToggle.addEventListener('click', toggleTheme);
 
-            // Search functionality
+            // Search bar focus and blur effects
             if (searchInput) {
+                searchInput.addEventListener('focus', function() {
+                    document.body.classList.add('search-active');
+                });
+
+                searchInput.addEventListener('blur', function() {
+                    document.body.classList.remove('search-active');
+                });
+
                 function debounce(func, wait) {
                     let timeout;
                     return function() {
