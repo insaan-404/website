@@ -52,25 +52,6 @@
             font-size: 1.1rem;
             transition: background-color 0.3s ease, color 0.3s ease, filter 0.3s ease;
         }
-
-        /* Background art container at the top */
-        .background-art {
-            width: 100%;
-            height: 200px;
-            /* Fallback gradient to confirm the div renders */
-            background-image: linear-gradient(to bottom, #111116, #333);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            z-index: 1;
-            border-bottom: 2px solid var(--accent-color); /* Debugging border */
-        }
-
-        /* In light theme, adjust the background art's appearance */
-        body.light-theme .background-art {
-            background-image: linear-gradient(to bottom, #e0e0e0, #ccc);
-        }
         
         /* Theme toggle button (floating) */
         .theme-toggle {
@@ -141,7 +122,7 @@
             opacity: 0.8;
         }
 
-        /* Animated underline effect on hover */
+        /* Animated underline effect on hover for all links */
         a::after {
             content: '';
             position: absolute;
@@ -284,7 +265,7 @@
         .search-container {
             position: relative;
             margin: 0.5rem 0;
-            z-index: 3; /* Ensure search bar is above blurred background */
+            z-index: 3;
         }
         
         .search-input {
@@ -302,7 +283,7 @@
         .search-input:focus {
             outline: none;
             border-color: var(--accent-color);
-            transform: scale(1.05); /* Pop effect on focus */
+            transform: scale(1.05);
         }
         
         .search-icon {
@@ -313,8 +294,43 @@
             color: var(--text-secondary);
         }
         
+        /* Search dropdown */
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--accent-secondary);
+            border-radius: var(--border-radius);
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 4;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-dropdown.active {
+            display: block;
+        }
+
+        .search-result {
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        .search-result a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+        }
+
         /* Blur background when search bar is focused */
-        .search-active .background-art,
         .search-active main,
         .search-active footer,
         .search-active .theme-toggle {
@@ -322,7 +338,7 @@
         }
 
         .search-active .search-container {
-            filter: none; /* Ensure search bar remains sharp */
+            filter: none;
         }
         
         .ripple-effect {
@@ -361,9 +377,6 @@
     </style>
 </head>
 <body>
-    <!-- Background art at the top -->
-    <div class="background-art"></div>
-
     <!-- Theme toggle button (floating) -->
     <button class="theme-toggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
@@ -384,6 +397,7 @@
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" class="search-input" placeholder="search posts ..." id="searchInput">
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
         
         <div class="section" id="posts">
@@ -501,12 +515,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
+            const searchDropdown = document.getElementById('searchDropdown');
             const postItems = document.querySelectorAll('.post-item');
             const projectItems = document.querySelectorAll('.project-item');
             const shareItems = document.querySelectorAll('.share-item');
             const themeToggle = document.querySelector('.theme-toggle');
 
-            // Force dark mode on page load for testing
+            // Force dark mode on page load
             document.body.classList.remove('light-theme');
             themeToggle.querySelector('i').classList.add('fa-moon');
             themeToggle.querySelector('i').classList.remove('fa-sun');
@@ -523,14 +538,18 @@
 
             themeToggle.addEventListener('click', toggleTheme);
 
-            // Search bar focus and blur effects
-            if (searchInput) {
+            // Search functionality with dropdown
+            if (searchInput && searchDropdown) {
                 searchInput.addEventListener('focus', function() {
                     document.body.classList.add('search-active');
+                    updateSearchResults(this.value);
                 });
 
                 searchInput.addEventListener('blur', function() {
                     document.body.classList.remove('search-active');
+                    setTimeout(() => {
+                        searchDropdown.classList.remove('active');
+                    }, 200); // Delay to allow clicking on dropdown items
                 });
 
                 function debounce(func, wait) {
@@ -542,33 +561,49 @@
                         timeout = setTimeout(() => func.apply(context, args), wait);
                     };
                 }
-                
-                const performSearch = debounce(function() {
-                    const searchTerm = this.value.toLowerCase().trim();
-                    
-                    postItems.forEach(item => {
+
+                const updateSearchResults = debounce(function(searchTerm) {
+                    searchTerm = searchTerm.toLowerCase().trim();
+                    searchDropdown.innerHTML = '';
+
+                    const allItems = [...postItems, ...projectItems, ...shareItems];
+                    const matchingItems = allItems.filter(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
-                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
-                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                        return title.includes(searchTerm) || excerpt.includes(searchTerm);
                     });
 
-                    projectItems.forEach(item => {
-                        const title = item.querySelector('a')?.textContent.toLowerCase() || '';
-                        const excerpt = item.dataset.excerpt?.toLowerCase() || '';
-                        const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
-                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                    if (searchTerm === '' || matchingItems.length === 0) {
+                        searchDropdown.classList.remove('active');
+                        allItems.forEach(item => {
+                            item.style.display = 'flex';
+                        });
+                        return;
+                    }
+
+                    matchingItems.forEach(item => {
+                        const title = item.querySelector('a').textContent;
+                        const link = item.querySelector('a').href;
+                        const resultDiv = document.createElement('div');
+                        resultDiv.classList.add('search-result');
+                        resultDiv.innerHTML = `<a href="${link}">${title}</a>`;
+                        searchDropdown.appendChild(resultDiv);
                     });
 
-                    shareItems.forEach(item => {
+                    searchDropdown.classList.add('active');
+
+                    // Update visibility of items in the main list
+                    allItems.forEach(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
                         const matchFound = title.includes(searchTerm) || excerpt.includes(searchTerm);
-                        item.style.display = (searchTerm === '' || matchFound) ? 'flex' : 'none';
+                        item.style.display = matchFound ? 'flex' : 'none';
                     });
                 }, 300);
-                
-                searchInput.addEventListener('input', performSearch);
+
+                searchInput.addEventListener('input', function() {
+                    updateSearchResults(this.value);
+                });
             }
 
             initializeScrolling();
