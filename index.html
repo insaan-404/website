@@ -169,12 +169,6 @@
         .post-item a, .project-item a, .share-item a {
             position: relative;
             display: inline-block;
-            /* Removed transform and animation */
-        }
-        
-        /* Removed pop animation on hover */
-        .post-item a:hover, .project-item a:hover, .share-item a:hover {
-            /* Only keeping the underline effect, removed transform and animation */
         }
         
         /* Enhanced underline effect specifically for post/project/share items */
@@ -340,8 +334,6 @@
         .search-result:hover {
             background-color: var(--accent-secondary);
         }
-
-        /* Removed anchor tag styling for search results */
         
         /* Blur background when search bar is focused */
         body.search-active main > *:not(.search-container),
@@ -374,8 +366,6 @@
             }
         }
 
-        /* Removed pop animation keyframes */
-        
         a {
             position: relative;
             overflow: hidden;
@@ -589,13 +579,18 @@
                         return;
                     }
 
-                    // Simplified search results - only show titles
+                    // Show only titles in search results
                     matchingItems.forEach(item => {
-                        const title = item.querySelector('a').textContent;
-                        const link = item.querySelector('a').href;
+                        const titleElement = item.querySelector('a');
+                        // Extract only the title from the element's text content
+                        // This ensures we don't include any preview text
+                        const titleText = titleElement.getAttribute('data-title');
+                        const link = titleElement.href;
+                        
                         const resultDiv = document.createElement('div');
                         resultDiv.classList.add('search-result');
-                        resultDiv.innerHTML = `${title}`; // Just showing title text
+                        // Display only the title
+                        resultDiv.textContent = titleText;
                         
                         // Add click event to navigate when clicked
                         resultDiv.addEventListener('click', function() {
