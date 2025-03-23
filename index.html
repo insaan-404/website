@@ -38,7 +38,7 @@
         }
         
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-color); /* Solid background color based on theme */
             color: var(--text-color);
             font-family: var(--font-family);
             line-height: 1.6;
@@ -50,18 +50,25 @@
             min-height: 100vh;
             position: relative;
             font-size: 1.1rem;
-            /* Starry Night-inspired background (only for dark theme) */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Background art container at the top */
+        .background-art {
+            width: 100%;
+            height: 200px; /* Fixed height for the background art */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 1080' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1920' height='1080' fill='%23111116'/%3E%3Ccircle cx='200' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='300' cy='200' r='4' fill='%23f5e050'/%3E%3Ccircle cx='400' cy='100' r='6' fill='%23f5e050'/%3E%3Ccircle cx='500' cy='300' r='3' fill='%23f5e050'/%3E%3Ccircle cx='600' cy='150' r='5' fill='%23f5e050'/%3E%3Ccircle cx='700' cy='250' r='4' fill='%23f5e050'/%3E%3Ccircle cx='800' cy='120' r='6' fill='%23f5e050'/%3E%3Ccircle cx='900' cy='200' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1000' cy='180' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1100' cy='220' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1200' cy='130' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1300' cy='280' r='3' fill='%23f5e050'/%3E%3Ccircle cx='1400' cy='160' r='5' fill='%23f5e050'/%3E%3Ccircle cx='1500' cy='240' r='4' fill='%23f5e050'/%3E%3Ccircle cx='1600' cy='110' r='6' fill='%23f5e050'/%3E%3Ccircle cx='1700' cy='190' r='3' fill='%23f5e050'/%3E%3Cpath d='M200 150 Q 300 100 400 150 Q 500 200 600 150 Q 700 100 800 150' stroke='%234a9c9a' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M900 200 Q 1000 150 1100 200 Q 1200 250 1300 200 Q 1400 150 1500 200' stroke='%232e5e5d' stroke-width='3' fill='none' opacity='0.5'/%3E%3Cpath d='M300 200 Q 400 250 500 200 Q 600 150 700 200' stroke='%234a9c9a' stroke-width='2' fill='none' opacity='0.5'/%3E%3Cpath d='M1000 180 Q 1100 230 1200 180 Q 1300 130 1400 180' stroke='%232e5e5d' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Remove Starry Night background in light theme */
-        body.light-theme {
+        /* Remove background art in light theme */
+        body.light-theme .background-art {
             background-image: none;
+            background-color: var(--bg-secondary); /* Fallback to a solid color in light mode */
         }
         
         /* Theme toggle button (floating) */
@@ -92,6 +99,8 @@
         main {
             flex-grow: 1;
             padding: 1rem;
+            position: relative;
+            z-index: 2; /* Ensure content is above the background art */
         }
         
         h1, h2, h3 {
@@ -318,6 +327,9 @@
     </style>
 </head>
 <body>
+    <!-- Background art at the top -->
+    <div class="background-art"></div>
+
     <!-- Theme toggle button (floating) -->
     <button class="theme-toggle" aria-label="Toggle theme">
         <i class="fas fa-moon"></i>
