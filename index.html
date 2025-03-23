@@ -219,13 +219,12 @@
         }
         
         .link-grid a {
-            margin-right: 0.5rem;
+            margin-right: 1rem; /* Adjusted spacing between links */
         }
-        
+
+        /* Removed the colon separator */
         .link-grid a:not(:last-child)::after {
-            content: ':';
-            margin-left: 0.5rem;
-            color: var(--text-color);
+            content: none; /* Remove the colon */
         }
         
         footer {
@@ -331,13 +330,13 @@
         }
 
         /* Blur background when search bar is focused */
-        .search-active main,
-        .search-active footer,
-        .search-active .theme-toggle {
+        body.search-active main,
+        body.search-active footer,
+        body.search-active .theme-toggle {
             filter: blur(5px);
         }
 
-        .search-active .search-container {
+        body.search-active .search-container {
             filter: none;
         }
         
@@ -549,7 +548,7 @@
                     document.body.classList.remove('search-active');
                     setTimeout(() => {
                         searchDropdown.classList.remove('active');
-                    }, 200); // Delay to allow clicking on dropdown items
+                    }, 200);
                 });
 
                 function debounce(func, wait) {
@@ -592,7 +591,6 @@
 
                     searchDropdown.classList.add('active');
 
-                    // Update visibility of items in the main list
                     allItems.forEach(item => {
                         const title = item.querySelector('a')?.textContent.toLowerCase() || '';
                         const excerpt = item.dataset.excerpt?.toLowerCase() || '';
